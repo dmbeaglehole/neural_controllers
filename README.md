@@ -18,11 +18,6 @@ See the notebooks folder for examples of steering:
 - Word meaning disambiguation (e.g. (Financial) Bank vs. Riverbank)
 - and more...
 
-## Features
-
-- Compatible with any decoder-only LLM
-- Detect and steer by aggregating arbitrary pre-specific concepts over layers
-
 ## Minimum working requirements
 
 - Python 3.10.15
