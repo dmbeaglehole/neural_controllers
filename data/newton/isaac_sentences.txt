@@ -1,0 +1,363 @@
+Sir Isaac Newton  (25 December 1642 – 20 March 1726/27) was an English mathematician, physicist, astronomer, alchemist, theologian, and author (described in his time as a "natural philosopher") widely recognised as one of the greatest mathematicians and physicists of all time and among the most influential scientists.
+He was a key figure in the philosophical revolution known as the Enlightenment.
+His book Philosophiæ Naturalis Principia Mathematica (Mathematical Principles of Natural Philosophy), first published in 1687, established classical mechanics.
+Newton also made seminal contributions to optics, and shares credit with German mathematician Gottfried Wilhelm Leibniz for developing infinitesimal calculus..
+In the Principia, Newton formulated the laws of motion and universal gravitation that formed the dominant scientific viewpoint until it was superseded by the theory of relativity.
+Newton used his mathematical description of gravity to derive Kepler's laws of planetary motion, account for tides, the trajectories of comets, the precession of the equinoxes and other phenomena, eradicating doubt about the Solar System's heliocentricity.
+He demonstrated that the motion of objects on Earth and celestial bodies could be accounted for by the same principles.
+Newton's inference that the Earth is an oblate spheroid was later confirmed by the geodetic measurements of Maupertuis, La Condamine, and others, convincing most European scientists of the superiority of Newtonian mechanics over earlier systems..
+Newton built the first practical reflecting telescope and developed a sophisticated theory of colour based on the observation that a prism separates white light into the colours of the visible spectrum.
+His work on light was collected in his highly influential book Opticks, published in 1704.
+He also formulated an empirical law of cooling, made the first theoretical calculation of the speed of sound, and introduced the notion of a Newtonian fluid.
+In addition to his work on calculus, as a mathematician Newton contributed to the study of power series, generalised the binomial theorem to non-integer exponents, developed a method for approximating the roots of a function, and classified most of the cubic plane curves..
+Newton was a fellow of Trinity College and the second Lucasian Professor of Mathematics at the University of Cambridge.
+He was a devout but unorthodox Christian who privately rejected the doctrine of the Trinity.
+Unusually for a member of the Cambridge faculty of the day, he refused to take holy orders in the Church of England.
+Beyond his work on the mathematical sciences, Newton dedicated much of his time to the study of alchemy and biblical chronology, but most of his work in those areas remained unpublished until long after his death.
+Politically and personally tied to the Whig party, Newton served two brief terms as Member of Parliament for the University of Cambridge, in 1689–1690 and 1701–1702.
+He was knighted by Queen Anne in 1705 and spent the last three decades of his life in London, serving as Warden (1696–1699) and Master (1699–1727) of the Royal Mint, as well as president of the Royal Society (1703–1727)..
+Isaac Newton was born (according to the Julian calendar in use in England at the time) on Christmas Day, 25 December 1642 (NS 4 January 1643), "an hour or two after midnight", at Woolsthorpe Manor in Woolsthorpe-by-Colsterworth, a hamlet in the county of Lincolnshire.
+His father, also named Isaac Newton, had died three months before.
+Born prematurely, Newton was a small child; his mother Hannah Ayscough reportedly said that he could have fit inside a quart mug.
+When Newton was three, his mother remarried and went to live with her new husband, the Reverend Barnabas Smith, leaving her son in the care of his maternal grandmother, Margery Ayscough (née Blythe).
+Newton disliked his stepfather and maintained some enmity towards his mother for marrying him, as revealed by this entry in a list of sins committed up to the age of 19: "Threatening my father and mother Smith to burn them and the house over them." Newton's mother had three children (Mary, Benjamin and Hannah) from her second marriage..
+From the age of about twelve until he was seventeen, Newton was educated at The King's School, Grantham, which taught Latin and Ancient Greek and probably imparted a significant foundation of mathematics.
+He was removed from school and returned to Woolsthorpe-by-Colsterworth by October 1659.
+His mother, widowed for the second time, attempted to make him a farmer, an occupation he hated.
+Henry Stokes, master at The King's School, persuaded his mother to send him back to school.
+Motivated partly by a desire for revenge against a schoolyard bully, he became the top-ranked student, distinguishing himself mainly by building sundials and models of windmills..
+In June 1661, he was admitted to Trinity College, Cambridge, on the recommendation of his uncle Rev William Ayscough, who had studied there.
+He started as a subsizar—paying his way by performing valet's duties—until he was awarded a scholarship in 1664, guaranteeing him four more years until he could get his MA.
+At that time the college's teachings were based on those of Aristotle, whom Newton supplemented with modern philosophers such as Descartes and astronomers such as Galileo and Thomas Street, through whom he learned of Kepler's work.
+He set down in his notebook a series of "Quaestiones" about mechanical philosophy as he found it.
+In 1665, he discovered the generalised binomial theorem and began to develop a mathematical theory that later became calculus.
+Soon after Newton had obtained his BA degree in August 1665, the university temporarily closed as a precaution against the Great Plague.
+Although he had been undistinguished as a Cambridge student, Newton's private studies at his home in Woolsthorpe over the subsequent two years saw the development of his theories on calculus, optics, and the law of gravitation..
+In April 1667, he returned to Cambridge and in October was elected as a fellow of Trinity.
+Fellows were required to become ordained priests, although this was not enforced in the restoration years and an assertion of conformity to the Church of England was sufficient.
+However, by 1675 the issue could not be avoided and by then his unconventional views stood in the way.
+Nevertheless, Newton managed to avoid it by means of special permission from Charles II..
+His studies had impressed the Lucasian professor Isaac Barrow, who was more anxious to develop his own religious and administrative potential (he became master of Trinity two years later); in 1669 Newton succeeded him, only one year after receiving his MA.
+He was elected a Fellow of the Royal Society (FRS) in 1672..
+Newton's work has been said "to distinctly advance every branch of mathematics then studied".
+His work on the subject, usually referred to as fluxions or calculus, seen in a manuscript of October 1666, is now published among Newton's mathematical papers.
+His work De analysi per aequationes numero terminorum infinitas, sent by Isaac Barrow to John Collins in June 1669, was identified by Barrow in a letter sent to Collins that August as the work "of an extraordinary genius and proficiency in these things"..
+Newton later became involved in a dispute with Leibniz over priority in the development of calculus (the Leibniz–Newton calculus controversy).
+Most modern historians believe that Newton and Leibniz developed calculus independently, although with very different mathematical notations.
+Occasionally it has been suggested that Newton published almost nothing about it until 1693, and did not give a full account until 1704, while Leibniz began publishing a full account of his methods in 1684.
+Leibniz's notation and "differential Method", nowadays recognised as much more convenient notations, were adopted by continental European mathematicians, and after 1820 or so, also by British mathematicians..
+His work extensively uses calculus in geometric form based on limiting values of the ratios of vanishingly small quantities: in the Principia itself, Newton gave demonstration of this under the name of "the method of first and last ratios" and explained why he put his expositions in this form, remarking also that "hereby the same thing is performed as by the method of indivisibles.".
+Because of this, the Principia has been called "a book dense with the theory and application of the infinitesimal calculus" in modern times and in Newton's time "nearly all of it is of this calculus." His use of methods involving "one or more orders of the infinitesimally small" is present in his De motu corporum in gyrum of 1684 and in his papers on motion "during the two decades preceding 1684"..
+Newton had been reluctant to publish his calculus because he feared controversy and criticism.
+He was close to the Swiss mathematician Nicolas Fatio de Duillier.
+In 1691, Duillier started to write a new version of Newton's Principia, and corresponded with Leibniz.
+In 1693, the relationship between Duillier and Newton deteriorated and the book was never completed..
+Starting in 1699, other members of the Royal Society accused Leibniz of plagiarism.
+The dispute then broke out in full force in 1711 when the Royal Society proclaimed in a study that it was Newton who was the true discoverer and labelled Leibniz a fraud; it was later found that Newton wrote the study's concluding remarks on Leibniz.
+Thus began the bitter controversy which marred the lives of both Newton and Leibniz until the latter's death in 1716..
+Newton is generally credited with the generalised binomial theorem, valid for any exponent.
+He discovered Newton's identities, Newton's method, classified cubic plane curves (polynomials of degree three in two variables), made substantial contributions to the theory of finite differences, and was the first to use fractional indices and to employ coordinate geometry to derive solutions to Diophantine equations.
+He approximated partial sums of the harmonic series by logarithms (a precursor to Euler's summation formula) and was the first to use power series with confidence and to revert power series.
+Newton's work on infinite series was inspired by Simon Stevin's decimals..
+When Newton received his MA and became a Fellow of the "College of the Holy and Undivided Trinity" in 1667, he made the commitment that "I will either set Theology as the object of my studies and will take holy orders when the time prescribed by these statutes [7 years] arrives, or I will resign from the college." Up until this point he had not thought much about religion and had twice signed his agreement to the thirty-nine articles, the basis of Church of England doctrine..
+He was appointed Lucasian Professor of Mathematics in 1669, on Barrow's recommendation.
+During that time, any Fellow of a college at Cambridge or Oxford was required to take holy orders and become an ordained Anglican priest.
+However, the terms of the Lucasian professorship required that the holder  be active in the church – presumably,  so as to have more time for science.
+Newton argued that this should exempt him from the ordination requirement, and Charles II, whose permission was needed, accepted this argument.
+Thus a conflict between Newton's religious views and Anglican orthodoxy was averted..
+In 1666, Newton observed that the spectrum of colours exiting a prism in the position of minimum deviation is oblong, even when the light ray entering the prism is circular, which is to say, the prism refracts different colours by different angles.
+This led him to conclude that colour is a property intrinsic to light – a point which had, until then, been a matter of debate..
+From 1670 to 1672, Newton lectured on optics.
+During this period he investigated the refraction of light, demonstrating that the multicoloured image produced by a prism, which he named a spectrum, could be recomposed into white light by a lens and a second prism.
+Modern scholarship has revealed that Newton's analysis and resynthesis of white light owes a debt to corpuscular alchemy..
+He showed that coloured light does not change its properties by separating out a coloured beam and shining it on various objects, and that regardless of whether reflected, scattered, or transmitted, the light remains the same colour.
+Thus, he observed that colour is the result of objects interacting with already-coloured light rather than objects generating the colour themselves.
+This is known as Newton's theory of colour..
+From this work, he concluded that the lens of any refracting telescope would suffer from the dispersion of light into colours (chromatic aberration).
+As a proof of the concept, he constructed a telescope using reflective mirrors instead of lenses as the objective to bypass that problem.
+Building the design, the first known functional reflecting telescope, today known as a Newtonian telescope, involved solving the problem of a suitable mirror material and shaping technique.
+Newton ground his own mirrors out of a custom composition of highly reflective speculum metal, using Newton's rings to judge the quality of the optics for his telescopes.
+In late 1668, he was able to produce this first reflecting telescope.
+It was about eight inches long and it gave a clearer and larger image.
+In 1671, the Royal Society asked for a demonstration of his reflecting telescope.
+Their interest encouraged him to publish his notes, Of Colours, which he later expanded into the work Opticks.
+When Robert Hooke criticised some of Newton's ideas, Newton was so offended that he withdrew from public debate.
+Newton and Hooke had brief exchanges in 1679–80, when Hooke, appointed to manage the Royal Society's correspondence, opened up a correspondence intended to elicit contributions from Newton to Royal Society transactions, which had the effect of stimulating Newton to work out a proof that the elliptical form of planetary orbits would result from a centripetal force inversely proportional to the square of the radius vector.
+But the two men remained generally on poor terms until Hooke's death..
+Newton argued that light is composed of particles or corpuscles, which were refracted by accelerating into a denser medium.
+He verged on soundlike waves to explain the repeated pattern of reflection and transmission by thin films (Opticks Bk.II, Props.
+12), but still retained his theory of 'fits' that disposed corpuscles to be reflected or transmitted (Props.13).
+However, later physicists favoured a purely wavelike explanation of light to account for the interference patterns and the general phenomenon of diffraction.
+Today's quantum mechanics, photons, and the idea of wave–particle duality bear only a minor resemblance to Newton's understanding of light..
+In his Hypothesis of Light of 1675, Newton posited the existence of the ether to transmit forces between particles.
+The contact with the Cambridge Platonist philosopher Henry More revived his interest in alchemy.
+He replaced the ether with occult forces based on Hermetic ideas of attraction and repulsion between particles.
+John Maynard Keynes, who acquired many of Newton's writings on alchemy, stated that "Newton was not the first of the age of reason: He was the last of the magicians." Newton's interest in alchemy cannot be isolated from his contributions to science.
+This was at a time when there was no clear distinction between alchemy and science.
+Had he not relied on the occult idea of action at a distance, across a vacuum, he might not have developed his theory of gravity..
+In 1704, Newton published Opticks, in which he expounded his corpuscular theory of light.
+He considered light to be made up of extremely subtle corpuscles, that ordinary matter was made of grosser corpuscles and speculated that through a kind of alchemical transmutation "Are not gross Bodies and Light convertible into one another, ...
+and may not Bodies receive much of their Activity from the Particles of Light which enter their Composition?" Newton also constructed a primitive form of a frictional electrostatic generator, using a glass globe..
+In his book Opticks, Newton was the first to show a diagram using a prism as a beam expander, and also the use of multiple-prism arrays.
+Some 278 years after Newton's discussion, multiple-prism beam expanders became central to the development of narrow-linewidth tunable lasers.
+Also, the use of these prismatic beam expanders led to the multiple-prism dispersion theory..
+Subsequent to Newton, much has been amended.
+Young and Fresnel combined Newton's particle theory with Huygens' wave theory to show that colour is the visible manifestation of light's wavelength.
+Science also slowly came to realise the difference between perception of colour and mathematisable optics.
+The German poet and scientist, Goethe, could not shake the Newtonian foundation but "one hole Goethe did find in Newton's armour, ...
+Newton had committed himself to the doctrine that refraction without colour was impossible.
+He, therefore, thought that the object-glasses of telescopes must forever remain imperfect, achromatism and refraction being incompatible.
+This inference was proved by Dollond to be wrong.".
+In 1679, Newton returned to his work on celestial mechanics by considering gravitation and its effect on the orbits of planets with reference to Kepler's laws of planetary motion.
+This followed stimulation by a brief exchange of letters in 1679–80 with Hooke, who had been appointed to manage the Royal Society's correspondence, and who opened a correspondence intended to elicit contributions from Newton to Royal Society transactions.
+Newton's reawakening interest in astronomical matters received further stimulus by the appearance of a comet in the winter of 1680–1681, on which he corresponded with John Flamsteed.
+After the exchanges with Hooke, Newton worked out a proof that the elliptical form of planetary orbits would result from a centripetal force inversely proportional to the square of the radius vector.
+Newton communicated his results to Edmond Halley and to the Royal Society in De motu corporum in gyrum, a tract written on about nine sheets which was copied into the Royal Society's Register Book in December 1684.
+This tract contained the nucleus that Newton developed and expanded to form the Principia..
+The Principia was published on 5 July 1687 with encouragement and financial help from Edmond Halley.
+In this work, Newton stated the three universal laws of motion.
+Together, these laws describe the relationship between any object, the forces acting upon it and the resulting motion, laying the foundation for classical mechanics.
+They contributed to many advances during the Industrial Revolution which soon followed and were not improved upon for more than 200 years.
+Many of these advances continue to be the underpinnings of non-relativistic technologies in the modern world.
+He used the Latin word gravitas (weight) for the effect that would become known as gravity, and defined the law of universal gravitation..
+In the same work, Newton presented a calculus-like method of geometrical analysis using 'first and last ratios', gave the first analytical determination (based on Boyle's law) of the speed of sound in air, inferred the oblateness of Earth's spheroidal figure, accounted for the precession of the equinoxes as a result of the Moon's gravitational attraction on the Earth's oblateness, initiated the gravitational study of the irregularities in the motion of the Moon, provided a theory for the determination of the orbits of comets, and much more..
+Newton made clear his heliocentric view of the Solar System—developed in a somewhat modern way because already in the mid-1680s he recognised the "deviation of the Sun" from the centre of gravity of the Solar System.
+For Newton, it was not precisely the centre of the Sun or any other body that could be considered at rest, but rather "the common centre of gravity of the Earth, the Sun and all the Planets is to be esteem'd the Centre of the World", and this centre of gravity "either is at rest or moves uniformly forward in a right line" (Newton adopted the "at rest" alternative in view of common consent that the centre, wherever it was, was at rest)..
+Newton's postulate of an invisible force able to act over vast distances led to him being criticised for introducing "occult agencies" into science.
+Later, in the second edition of the Principia (1713), Newton firmly rejected such criticisms in a concluding General Scholium, writing that it was enough that the phenomena implied a gravitational attraction, as they did; but they did not so far indicate its cause, and it was both unnecessary and improper to frame hypotheses of things that were not implied by the phenomena.
+(Here Newton used what became his famous expression "hypotheses non-fingo")..
+With the Principia, Newton became internationally recognised.
+He acquired a circle of admirers, including the Swiss-born mathematician Nicolas Fatio de Duillier..
+In 1710, Newton found 72 of the 78 "species" of cubic curves and categorised them into four types.
+ In 1717, and probably with Newton's help, James Stirling proved that every cubic was one of these four types.
+Newton also claimed that the four types could be obtained by plane projection from one of them, and this was proved in 1731, four years after his death..
+In the 1690s, Newton wrote a number of religious tracts dealing with the literal and symbolic interpretation of the Bible.
+A manuscript Newton sent to John Locke in which he disputed the fidelity of 1 John 5:7—the Johannine Comma—and its fidelity to the original manuscripts of the New Testament, remained unpublished until 1785..
+Newton was also a member of the Parliament of England for Cambridge University in 1689 and 1701, but according to some accounts his only comments were to complain about a cold draught in the chamber and request that the window be closed.
+He was, however, noted by Cambridge diarist Abraham de la Pryme to have rebuked students who were frightening locals by claiming that a house was haunted..
+Newton moved to London to take up the post of warden of the Royal Mint in 1696, a position that he had obtained through the patronage of Charles Montagu, 1st Earl of Halifax, then Chancellor of the Exchequer.
+He took charge of England's great recoining, trod on the toes of Lord Lucas, Governor of the Tower, and secured the job of deputy comptroller of the temporary Chester branch for Edmond Halley.
+Newton became perhaps the best-known Master of the Mint upon the death of Thomas Neale in 1699, a position Newton held for the last 30 years of his life.
+These appointments were intended as sinecures, but Newton took them seriously.
+He retired from his Cambridge duties in 1701, and exercised his authority to reform the currency and punish clippers and counterfeiters..
+As Warden, and afterwards as Master, of the Royal Mint, Newton estimated that 20 percent of the coins taken in during the Great Recoinage of 1696 were counterfeit.
+Counterfeiting was high treason, punishable by the felon being hanged, drawn and quartered.
+Despite this, convicting even the most flagrant criminals could be extremely difficult, however, Newton proved equal to the task..
+Disguised as a habitué of bars and taverns, he gathered much of that evidence himself.
+For all the barriers placed to prosecution, and separating the branches of government, English law still had ancient and formidable customs of authority.
+Newton had himself made a justice of the peace in all the home counties.
+A draft letter regarding the matter is included in Newton's personal first edition of Philosophiæ Naturalis Principia Mathematica, which he must have been amending at the time.
+Then he conducted more than 100 cross-examinations of witnesses, informers, and suspects between June 1698 and Christmas 1699.
+Newton was made President of the Royal Society in 1703 and an associate of the French Académie des Sciences.
+In his position at the Royal Society, Newton made an enemy of John Flamsteed, the Astronomer Royal, by prematurely publishing Flamsteed's Historia Coelestis Britannica, which Newton had used in his studies..
+In April 1705, Queen Anne knighted Newton during a royal visit to Trinity College, Cambridge.
+The knighthood is likely to have been motivated by political considerations connected with the parliamentary election in May 1705, rather than any recognition of Newton's scientific work or services as Master of the Mint.
+Newton was the second scientist to be knighted, after Francis Bacon..
+As a result of a report written by Newton on 21 September 1717 to the Lords Commissioners of His Majesty's Treasury, the bimetallic relationship between gold coins and silver coins was changed by royal proclamation on 22 December 1717, forbidding the exchange of gold guineas for more than 21 silver shillings.
+This inadvertently resulted in a silver shortage as silver coins were used to pay for imports, while exports were paid for in gold, effectively moving Britain from the silver standard to its first gold standard.
+It is a matter of debate as to whether he intended to do this or not.
+It has been argued that Newton conceived of his work at the Mint as a continuation of his alchemical work..
+Newton was invested in the South Sea Company and lost some £20,000 (£4.4 million in 2020) when it collapsed in around 1720..
+Toward the end of his life, Newton took up residence at Cranbury Park, near Winchester, with his niece and her husband, until his death.
+His half-niece, Catherine Barton Conduitt, served as his hostess in social affairs at his house on Jermyn Street in London; he was her "very loving Uncle", according to his letter to her when she was recovering from smallpox..
+Newton died in his sleep in London on 20 March 1727 (OS 20 March 1726; NS 31 March 1727).
+He was given a ceremonial funeral, attended by nobles, scientists, and philosophers, and was buried in Westminster Abbey among kings and queens.
+He is also the first scientist to be buried in the abbey.
+Voltaire may have been present at his funeral.
+A bachelor, he had divested much of his estate to relatives during his last years, and died intestate.
+His papers went to John Conduitt and Catherine Barton..
+After his death, Newton's hair was examined and found to contain mercury, probably resulting from his alchemical pursuits.
+Mercury poisoning could explain Newton's eccentricity in late life..
+Although it was claimed that he was once engaged, Newton never married.
+The French writer and philosopher Voltaire, who was in London at the time of Newton's funeral, said that he "was never sensible to any passion, was not subject to the common frailties of mankind, nor had any commerce with women—a circumstance which was assured me by the physician and surgeon who attended him in his last moments".
+This now-widespread belief that he died a virgin has been commented on by writers as diverse as mathematician Charles Hutton, economist John Maynard Keynes, and physicist Carl Sagan..
+Newton had a close friendship with the Swiss mathematician Nicolas Fatio de Duillier, whom he met in London around 1689—some of their correspondence has survived.
+Their relationship came to an abrupt and unexplained end in 1693, and at the same time Newton suffered a nervous breakdown, which included sending wild accusatory letters to his friends Samuel Pepys and John Locke.
+His note to the latter included the charge that Locke "endeavoured to embroil me with woemen"..
+Newton was relatively modest about his achievements, writing in a letter to Robert Hooke in February 1676, "If I have seen further it is by standing on the shoulders of giants." Two writers think that the sentence, written at a time when Newton and Hooke were in dispute over optical discoveries, was an oblique attack on Hooke (said to have been short and hunchbacked), rather than—or in addition to—a statement of modesty.
+On the other hand, the widely known proverb about standing on the shoulders of giants, published among others by seventeenth-century poet George Herbert (a former orator of the University of Cambridge and fellow of Trinity College) in his Jacula Prudentum (1651), had as its main point that "a dwarf on a giant's shoulders sees farther of the two", and so its effect as an analogy would place Newton himself rather than Hooke as the 'dwarf'..
+In a later memoir, Newton wrote, "I do not know what I may appear to the world, but to myself I seem to have been only like a boy playing on the sea-shore, and diverting myself in now and then finding a smoother pebble or a prettier shell than ordinary, whilst the great ocean of truth lay all undiscovered before me.".
+In 2015, Steven Weinberg, a Nobel laureate in physics, called Newton "a nasty antagonist" and "a bad man to have as an enemy".
+He particularly noted Newton's attitude towards Robert Hooke and Gottfried Wilhelm Leibniz..
+It has been suggested from these and other traits, and his profound power of concentration, that Newton may have had a form of high-functioning autism, known as Asperger's syndrome..
+The mathematician Joseph-Louis Lagrange said that Newton was the greatest genius who ever lived, and once added that Newton was also "the most fortunate, for we cannot find more than once a system of the world to establish." English poet Alexander Pope wrote the famous epitaph:.
+Nature, and Nature's laws lay hid in night..
+God said, Let Newton be! and all was light..
+But this was not allowed to be inscribed in the monument.
+The epitaph in the monument is as follows:.
+ISAACUS NEWTON Eques Auratus, / Qui, animi vi prope divinâ, / Planetarum Motus, Figuras, / Cometarum semitas, Oceanique Aestus.
+Suâ Mathesi facem praeferente / Primus demonstravit: / Radiorum Lucis dissimilitudines, / Colorumque inde nascentium proprietates, / Quas nemo antea vel suspicatus erat, pervestigavit.
+Scripturae, / Sedulus, sagax, fidus Interpres / Dei O.
+Majestatem Philosophiâ asseruit, / Evangelij Simplicitatem Moribus expressit.
+/ Sibi gratulentur Mortales, / Tale tantumque exstitisse / HUMANI GENERIS DECUS.
+which can be translated as follows:.
+Here is buried Isaac Newton, Knight, who by a strength of mind almost divine, and mathematical principles peculiarly his own, explored the course and figures of the planets, the paths of comets, the tides of the sea, the dissimilarities in rays of light, and, what no other scholar has previously imagined, the properties of the colours thus produced.
+Diligent, sagacious and faithful, in his expositions of nature, antiquity and the holy Scriptures, he vindicated by his philosophy the majesty of God mighty and good, and expressed the simplicity of the Gospel in his manners.
+Mortals rejoice that there has existed such and so great an ornament of the human race! He was born on 25th December 1642, and died on 20th March 1726..
+In a 2005 survey of members of Britain's Royal Society (formerly headed by Newton) asking who had the greater effect on the history of science, Newton or Albert Einstein, the members deemed Newton to have made the greater overall contribution.
+In 1999, an opinion poll of 100 of the day's leading physicists voted Einstein the "greatest physicist ever," with Newton the runner-up, while a parallel survey of rank-and-file physicists by the site PhysicsWeb gave the top spot to Newton.
+Einstein kept a picture of Newton on his study wall alongside ones of Michael Faraday and James Clerk Maxwell..
+The SI derived unit of force is named the newton in his honour..
+Woolsthorpe By Colsterworth is a Grade I listed building by Historic England through being his birthplace and  "where he discovered gravity and developed his theories regarding the refraction of light"..
+In 1816, a tooth said to have belonged to Newton was sold for £730 (3,633) in London to an aristocrat who had it set in a ring.
+Guinness World Records 2002 classified it as the most valuable tooth, which would value approximately £25,000 (35,700) in late 2001.
+Who bought it and who currently has it has not been disclosed..
+Newton himself often told the story that he was inspired to formulate his theory of gravitation by watching the fall of an apple from a tree.
+The story is believed to have passed into popular knowledge after being related by Catherine Barton, Newton's niece, to Voltaire.
+Voltaire then wrote in his Essay on Epic Poetry (1727), "Sir Isaac Newton walking in his gardens, had the first thought of his system of gravitation, upon seeing an apple falling from a tree.".
+Although it has been said that the apple story is a myth and that he did not arrive at his theory of gravity at any single moment, acquaintances of Newton (such as William Stukeley, whose manuscript account of 1752 has been made available by the Royal Society) do in fact confirm the incident, though not the apocryphal version that the apple actually hit Newton's head.
+Stukeley recorded in his Memoirs of Sir Isaac Newton's Life a conversation with Newton in Kensington on 15 April 1726:.
+John Conduitt, Newton's assistant at the Royal Mint and husband of Newton's niece, also described the event when he wrote about Newton's life:.
+It is known from his notebooks that Newton was grappling in the late 1660s with the idea that terrestrial gravity extends, in an inverse-square proportion, to the Moon; however, it took him two decades to develop the full-fledged theory.
+The question was not whether gravity existed, but whether it extended so far from Earth that it could also be the force holding the Moon to its orbit.
+Newton showed that if the force decreased as the inverse square of the distance, one could indeed calculate the Moon's orbital period, and get good agreement.
+He guessed the same force was responsible for other orbital motions, and hence named it "universal gravitation"..
+Various trees are claimed to be "the" apple tree which Newton describes.
+The King's School, Grantham claims that the tree was purchased by the school, uprooted and transported to the headmaster's garden some years later.
+The staff of the (now) National Trust-owned Woolsthorpe Manor dispute this, and claim that a tree present in their gardens is the one described by Newton.
+A descendant of the original tree can be seen growing outside the main gate of Trinity College, Cambridge, below the room Newton lived in when he studied there.
+The National Fruit Collection at Brogdale in Kent can supply grafts from their tree, which appears identical to Flower of Kent, a coarse-fleshed cooking variety..
+Newton's monument (1731) can be seen in Westminster Abbey, at the north of the entrance to the choir against the choir screen, near his tomb.
+It was executed by the sculptor Michael Rysbrack (1694–1770) in white and grey marble with design by the architect William Kent.
+The monument features a figure of Newton reclining on top of a sarcophagus, his right elbow resting on several of his great books and his left hand pointing to a scroll with a mathematical design.
+Above him is a pyramid and a celestial globe showing the signs of the Zodiac and the path of the comet of 1680.
+A relief panel depicts putti using instruments such as a telescope and prism.
+The Latin inscription on the base translates as:Here is buried Isaac Newton, Knight, who by a strength of mind almost divine, and mathematical principles peculiarly his own, explored the course and figures of the planets, the paths of comets, the tides of the sea, the dissimilarities in rays of light, and, what no other scholar has previously imagined, the properties of the colours thus produced.
+Diligent, sagacious and faithful, in his expositions of nature, antiquity and the holy Scriptures, he vindicated by his philosophy the majesty of God mighty and good, and expressed the simplicity of the Gospel in his manners.
+Mortals rejoice that there has existed such and so great an ornament of the human race! He was born on 25 December 1642, and died on 20 March 1726/7.—Translation from G.L.
+Smyth, The Monuments and Genii of St.
+Paul's Cathedral, and of Westminster Abbey (1826), ii, 703–704..
+From 1978 until 1988, an image of Newton designed by Harry Ecclestone appeared on Series D £1 banknotes issued by the Bank of England (the last £1 notes to be issued by the Bank of England).
+Newton was shown on the reverse of the notes holding a book and accompanied by a telescope, a prism and a map of the Solar System..
+A statue of Isaac Newton, looking at an apple at his feet, can be seen at the Oxford University Museum of Natural History.
+A large bronze statue, Newton, after William Blake, by Eduardo Paolozzi, dated 1995 and inspired by Blake's etching, dominates the piazza of the British Library in London.
+A bronze statue of Newton was erected in 1858 in the centre of Grantham where he went to school, prominently standing in front of Grantham Guildhall..
+The still-surviving farmhouse at Woolsthorpe By Colsterworth is a Grade I listed building by Historic England through being his birthplace and  "where he discovered gravity and developed his theories regarding the refraction of light"..
+Although born into an Anglican family, by his thirties Newton held a Christian faith that, had it been made public, would not have been considered orthodox by mainstream Christianity, with one historian labelling him a heretic..
+By 1672, he had started to record his theological researches in notebooks which he showed to no one and which have only recently been examined.
+They demonstrate an extensive knowledge of early Church writings and show that in the conflict between Athanasius and Arius which defined the Creed, he took the side of Arius, the loser, who rejected the conventional view of the Trinity.
+Newton "recognized Christ as a divine mediator between God and man, who was subordinate to the Father who created him." He was especially interested in prophecy, but for him, "the great apostasy was trinitarianism.".
+Newton tried unsuccessfully to obtain one of the two fellowships that exempted the holder from the ordination requirement.
+At the last moment in 1675 he received a dispensation from the government that excused him and all future holders of the Lucasian chair..
+In Newton's eyes, worshipping Christ as God was idolatry, to him the fundamental sin.
+In 1999, historian Stephen D.
+Snobelen wrote, "Isaac Newton was a heretic.
+he never made a public declaration of his private faith—which the orthodox would have deemed extremely radical.
+He hid his faith so well that scholars are still unraveling his personal beliefs." Snobelen concludes that Newton was at least a Socinian sympathiser (he owned and had thoroughly read at least eight Socinian books), possibly an Arian and almost certainly an anti-trinitarian..
+The view that Newton was Semi-Arian has lost support now that scholars have investigated Newton's theological papers, and now most scholars identify Newton as an Antitrinitarian monotheist..
+Although the laws of motion and universal gravitation became Newton's best-known discoveries, he warned against using them to view the Universe as a mere machine, as if akin to a great clock.
+He said, "So then gravity may put the planets into motion, but without the Divine Power it could never put them into such a circulating motion, as they have about the sun"..
+Along with his scientific fame, Newton's studies of the Bible and of the early Church Fathers were also noteworthy.
+Newton wrote works on textual criticism, most notably An Historical Account of Two Notable Corruptions of Scripture and Observations upon the Prophecies of Daniel, and the Apocalypse of St.
+He placed the crucifixion of Jesus Christ at 3 April, AD 33, which agrees with one traditionally accepted date..
+He believed in a rationally immanent world, but he rejected the hylozoism implicit in Leibniz and Baruch Spinoza.
+The ordered and dynamically informed Universe could be understood, and must be understood, by an active reason.
+In his correspondence, Newton claimed that in writing the Principia "I had an eye upon such Principles as might work with considering men for the belief of a Deity".
+He saw evidence of design in the system of the world: "Such a wonderful uniformity in the planetary system must be allowed the effect of choice".
+But Newton insisted that divine intervention would eventually be required to reform the system, due to the slow growth of instabilities.
+For this, Leibniz lampooned him: "God Almighty wants to wind up his watch from time to time: otherwise it would cease to move.
+He had not, it seems, sufficient foresight to make it a perpetual motion.".
+Newton's position was vigorously defended by his follower Samuel Clarke in a famous correspondence.
+A century later, Pierre-Simon Laplace's work Celestial Mechanics had a natural explanation for why the planet orbits do not require periodic divine intervention.
+The contrast between Laplace's mechanistic worldview and Newton's one is the most strident considering the famous answer which the French scientist gave Napoleon, who had criticised him for the absence of the Creator in the Mécanique céleste: "Sire, j'ai pu me passer de cette hypothèse" ("Sir, I didn't need this hypothesis")..
+Scholars long debated whether Newton disputed the doctrine of the Trinity.
+His first biographer, David Brewster, who compiled his manuscripts, interpreted Newton as questioning the veracity of some passages used to support the Trinity, but never denying the doctrine of the Trinity as such.
+In the twentieth century, encrypted manuscripts written by Newton and bought by John Maynard Keynes (among others) were deciphered and it became known that Newton did indeed reject Trinitarianism..
+Newton and Robert Boyle's approach to the mechanical philosophy was promoted by rationalist pamphleteers as a viable alternative to the pantheists and enthusiasts, and was accepted hesitantly by orthodox preachers as well as dissident preachers like the latitudinarians.
+The clarity and simplicity of science was seen as a way to combat the emotional and metaphysical superlatives of both superstitious enthusiasm and the threat of atheism, and at the same time, the second wave of English deists used Newton's discoveries to demonstrate the possibility of a "Natural Religion"..
+The attacks made against pre-Enlightenment "magical thinking", and the mystical elements of Christianity, were given their foundation with Boyle's mechanical conception of the universe.
+Newton gave Boyle's ideas their completion through mathematical proofs and, perhaps more importantly, was very successful in popularising them..
+In a manuscript he wrote in 1704 (never intended to be published), he mentions the date of 2060, but it is not given as a date for the end of days.
+It has been falsely reported as a prediction.
+The passage is clear when the date is read in context.
+He was against date setting for the end of days, concerned that this would put Christianity into disrepute..
+In the character of Morton Opperly in "Poor Superman" (1951), speculative fiction author Fritz Leiber says of Newton, "Everyone knows Newton as the great scientist.
+Few remember that he spent half his life muddling with alchemy, looking for the philosopher's stone.
+That was the pebble by the seashore he really wanted to find.".
+Of an estimated ten million words of writing in Newton's papers, about one million deal with alchemy.
+Many of Newton's writings on alchemy are copies of other manuscripts, with his own annotations.
+Alchemical texts mix artisanal knowledge with philosophical speculation, often hidden behind layers of wordplay, allegory, and imagery to protect craft secrets.
+Some of the content contained in Newton's papers could have been considered heretical by the church..
+In 1888, after spending sixteen years cataloguing Newton's papers, Cambridge University kept a small number and returned the rest to the Earl of Portsmouth.
+In 1936, a descendant offered the papers for sale at Sotheby's.
+The collection was broken up and sold for a total of about £9,000.
+John Maynard Keynes was one of about three dozen bidders who obtained part of the collection at auction.
+Keynes went on to reassemble an estimated half of Newton's collection of papers on alchemy before donating his collection to Cambridge University in 1946..
+All of Newton's known writings on alchemy are currently being put online in a project undertaken by Indiana University: "The Chymistry of Isaac Newton" and summarised in a book..
+Charles Coulston Gillispie disputes that Newton ever practised alchemy, saying that "his chemistry was in the spirit of Boyle's corpuscular philosophy.".
+In June 2020, two unpublished pages of Newton's notes on Jan Baptist van Helmont's book on plague, De Peste, were being auctioned online by Bonhams.
+Newton's analysis of this book, which he made in Cambridge while protecting himself from London's 1665–1666 infection, is the most substantial written statement he is known to have made about the plague, according to Bonhams.
+As far as the therapy is concerned, Newton writes that "the best is a toad suspended by the legs in a chimney for three days, which at last vomited up earth with various insects in it, on to a dish of yellow wax, and shortly after died.
+Combining powdered toad with the excretions and serum made into lozenges and worn about the affected area drove away the contagion and drew out the poison"..
+Enlightenment philosophers chose a short history of scientific predecessors—Galileo, Boyle, and Newton principally—as the guides and guarantors of their applications of the singular concept of nature and natural law to every physical and social field of the day.
+In this respect, the lessons of history and the social structures built upon it could be discarded..
+It is held by European philosophers of the Enlightenment and by historians of the Enlightenment that Newton's publication of the Principia was a turning point in the Scientific Revolution and started the Enlightenment.
+It was Newton's conception of the universe based upon natural and rationally understandable laws that became one of the seeds for Enlightenment ideology.
+Locke and Voltaire applied concepts of natural law to political systems advocating intrinsic rights; the physiocrats and Adam Smith applied natural conceptions of psychology and self-interest to economic systems; and sociologists criticised the current social order for trying to fit history into natural models of progress.
+Monboddo and Samuel Clarke resisted elements of Newton's work, but eventually rationalised it to conform with their strong religious views of nature..
+ De analysi per aequationes numero terminorum infinitas (1669, published 1711).
+ Of Natures Obvious Laws & Processes in Vegetation (unpublished, c.
+ De motu corporum in gyrum (1684).
+ Philosophiæ Naturalis Principia Mathematica (1687).
+Calorum Descriptiones & signa (1701).
+ Reports as Master of the Mint (1701–1725).
+ De mundi systemate (The System of the World) (1728).
+ The Chronology of Ancient Kingdoms Amended (1728).
+ Observations on Daniel and The Apocalypse of St.
+ Method of Fluxions (1671, published 1736).
+ An Historical Account of Two Notable Corruptions of Scripture (1754).
+The Principia: Mathematical Principles of Natural Philosophy.
+University of California Press, (1999).
+The Key to Newton's Dynamics: The Kepler Problem and the Principia: Containing an English Translation of Sections 1, 2, and 3 of Book One from the First (1687) Edition of Newton's Mathematical Principles of Natural Philosophy, University of California Press (1996).
+The Optical Papers of Isaac Newton.
+1: The Optical Lectures, 1670–1672, Cambridge University Press (1984).
+Opticks, or A Treatise of the Reflections, Refractions, Inflections & Colours of Light.
+Sir Isaac Newton's Mathematical Principles of Natural Philosophy and His System of the World, tr.
+Berkeley: University of California Press (1934).
+The correspondence of Isaac Newton, ed.
+Turnbull and others, 7 vols (1959–77).
+ Newton's Philosophy of Nature: Selections from His Writings edited by H.S.
+ Isaac Newton, Sir; J Edleston; Roger Cotes, Correspondence of Sir Isaac Newton and Professor Cotes, including letters of other eminent men, London, John W.
+Parker, West Strand; Cambridge, John Deighton (1850, Google Books).
+An Account of Sir Isaac Newton's Philosophical Discoveries, in Four Books.
+Isaac Newton's Papers and Letters on Natural Philosophy and Related Documents, eds.
+The Unpublished Scientific Papers of Isaac Newton: A Selection from the Portsmouth Collection in the University Library, Cambridge, ed.
+Isaac Newton's 'Theory of the Moon's Motion' (1702).
+ Elements of the Philosophy of Newton, a book by Voltaire.
+ List of multiple discoveries: seventeenth century.
+ List of things named after Isaac Newton.
+  This well documented work provides, in particular, valuable information regarding Newton's knowledge of Patristics.
+  – Preface by Albert Einstein.
+Reprinted by Johnson Reprint Corporation, New York (1972).
+  Keynes took a close interest in Newton and owned many of Newton's private papers..
+  (edited by A.H.
+White; originally published in 1752).
+"Ann and Arthur Storer of Calvert County, Maryland, Friends of Sir Isaac Newton," The American Genealogist 79 (2004): 13–27..
+ Dobbs, Betty Jo Tetter.
+The Janus Faces of Genius: The Role of Alchemy in Newton's Thought.
+(1991), links the alchemy to Arianism.
+ Force, James E., and Richard H.
+Newton and Religion: Context, Nature, and Influence.
+xvii, 325.; 13 papers by scholars using newly opened manuscripts.
+Newton's Gift: How Sir Isaac Newton Unlocked the System of the World.
+Bernard and Smith, George E., ed.
+The Cambridge Companion to Newton.
+Focuses on philosophical issues only; excerpt and text search; complete edition online.
+On the Shoulders of Giants.
+ Places selections from Newton's Principia in the context of selected writings by Copernicus, Kepler, Galileo and Einstein.
+Papers and Letters in Natural Philosophy, edited by I.
+Harvard University Press, 1958, 1978; ..
+ Enlightening Science digital project: Texts of his papers, "Popularisations" and podcasts at the Newton Project.
+ Newton's works – full texts, at the Newton Project.
+ Newton's papers in the Royal Society's archives.
+ The Newton Manuscripts at the National Library of Israel – the collection of all his religious writings.
+ "Newton Papers" – Cambridge Digital Library.
+Alumni of Trinity College, Cambridge.
+English justices of the peace.
+Fellows of the Royal Society.
+Fellows of Trinity College, Cambridge.
+Members of the pre-1707 Parliament of England for the University of Cambridge.
+People educated at The King's School, Grantham.
+People from South Kesteven District.
+Presidents of the Royal Society.
+Writers about religion and science.
