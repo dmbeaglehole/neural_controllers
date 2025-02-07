@@ -157,6 +157,7 @@ val_metrics = {
 ```
 ## Citation
 If you find this work useful in your research, please consider citing:
+```bibtex
 @misc{beaglehole2025aggregateconquerdetectingsteering,
       title={Aggregate and conquer: detecting and steering LLM concepts by combining nonlinear predictors over multiple layers}, 
       author={Daniel Beaglehole and Adityanarayanan Radhakrishnan and Enric Boix-Adserà and Mikhail Belkin},
@@ -166,6 +167,7 @@ If you find this work useful in your research, please consider citing:
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2502.03708}, 
 }
+```
 
 ## References
 [1]: Lin, Z., Wang, Z., Tong, Y., Wang, Y., Guo, Y., Wang, Y., & Shang, J. (2023). ToxicChat: Unveiling Hidden Challenges of Toxicity Detection in Real-World User-AI Conversation. *arXiv preprint arXiv:2310.17389*
