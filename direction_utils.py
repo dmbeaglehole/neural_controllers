@@ -2,6 +2,9 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 
+import sys
+sys.path.insert(0,'/u/dbeaglehole/recursive_feature_machines')
+
 from rfm import LaplaceRFM
 from sklearn.linear_model import LogisticRegression
 
@@ -396,7 +399,7 @@ def train_rfm_probe_on_concept(train_X, train_y, val_X, val_y, hyperparams,
                 (val_X, val_y), 
                 loader=False, 
                 iters=hyperparams['rfm_iters'],
-                classif=False,
+                classification=False,
                 method='lstsq',
                 M_batch_size=hyperparams['M_batch_size'],
                 verbose=False
