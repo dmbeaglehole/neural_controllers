@@ -942,14 +942,14 @@ def hallucination_dataset(data_path, tokenizer, seed: int = 0):
     }
 
 
-def poetry_dataset(tokenizer, concept_types=['prose','poetry']):
+def poetry_dataset(data_dir, tokenizer, assistant_tag='', concept_types=['prose','poetry']):
     random.seed(0)
 
     template_str = 'Complete the translation of the following statement in {orig_lang} to {new_lang}. \nStatement: {statement}\nTranslation: {partial} {assistant_tag}'
     
-    with open('./data/poetry/sentences.txt', 'r') as f:
+    with open(os.path.join(data_dir, 'sentences.txt'), 'r') as f:
         prose_sentences = f.readlines()
-    with open('./data/poetry/poems.txt', 'r') as f:
+    with open(os.path.join(data_dir, 'poems.txt'), 'r') as f:
         poem_sentences = f.readlines()
 
     raw_data = {}
@@ -987,7 +987,7 @@ def poetry_dataset(tokenizer, concept_types=['prose','poetry']):
 
             data.append(
                             template_str.format(orig_lang=orig_lang, new_lang=new_lang, 
-                                                statement=statement, partial=partial)
+                                                statement=statement, partial=partial, assistant_tag=assistant_tag)
                        )
         
 
