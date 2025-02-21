@@ -1,6 +1,6 @@
 # Neural Controllers
 
-A Python library for implementing neural controllers with decoder-only Large Language Models (LLMs). Our API allows you to steer the output of language models toward desired concepts and generate lightweight detectors for arbitrary pre-defined concepts. The approach can be implemented with any decoder-only LLM, with demonstrated success on models like instruction-tuned [Llama-3.1-8B](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct), [Llama-3.3-70B](https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct), and [Gemma-2-9B](https://huggingface.co/google/gemma-2-9b-it). 
+A Python library for implementing neural controllers with decoder-only Large Language Models (LLMs), as described in [our paper](https://arxiv.org/abs/2502.03708). Our API allows you to steer the output of language models toward desired concepts and generate lightweight detectors for arbitrary pre-defined concepts. The approach can be implemented with any decoder-only LLM, with demonstrated success on models like instruction-tuned [Llama-3.1-8B](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct), [Llama-3.3-70B](https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct), and [Gemma-2-9B](https://huggingface.co/google/gemma-2-9b-it). 
 
 We choose Recursive Feature Machines (RFMs) as our nonlinear predictor at every layer and (often) as our aggregation model. These models are simple, lightweight kernel machines. We also include functionality for our aggregation technology with other baselines including linear/logistic probing and contrastive methods like PCA and difference-in-means. The RFM library can be installed from github (https://github.com/aradha/recursive_feature_machines) using the following command:
 ```bash
@@ -17,11 +17,6 @@ See the notebooks folder for examples of steering:
 - Name disambiguation (e.g. Cam vs. Isaac Newton)
 - Word meaning disambiguation (e.g. (Financial) Bank vs. Riverbank)
 - and more...
-
-## Features
-
-- Compatible with any decoder-only LLM
-- Detect and steer by aggregating arbitrary pre-specific concepts over layers
 
 ## Minimum working requirements
 
@@ -158,6 +153,19 @@ val_metrics = {
         'recall': float,   # Aggregated recall
         'precision': float # Aggregated precision
     }
+}
+```
+## Citation
+If you find this work useful in your research, please consider citing:
+```bibtex
+@misc{beaglehole2025aggregateconquerdetectingsteering,
+      title={Aggregate and conquer: detecting and steering LLM concepts by combining nonlinear predictors over multiple layers}, 
+      author={Daniel Beaglehole and Adityanarayanan Radhakrishnan and Enric Boix-Adserà and Mikhail Belkin},
+      year={2025},
+      eprint={2502.03708},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2502.03708}, 
 }
 ```
 
