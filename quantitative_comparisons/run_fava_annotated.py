@@ -101,7 +101,7 @@ def get_fava_annotated_data(tokenizer):
         labels.append(label)
     return inputs, labels
 
-def get_fava_training_data(tokenizer, unsupervised=False, max_n=7000):
+def get_fava_training_data(tokenizer, unsupervised=False, max_n=10000):
     # Load training data from FAVA dataset
     from datasets import load_dataset
     ds = load_dataset("fava-uw/fava-data")

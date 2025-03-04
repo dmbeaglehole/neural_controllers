@@ -9,7 +9,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 
 from neural_controllers import NeuralController
-from utils import load_model
+from utils import load_model, pca_programming_language_dataset, programming_language_dataset
 
 OPENAI_API_KEY=os.environ['OPENAI_API_KEY']
 
@@ -178,6 +178,7 @@ def main():
     model_name = args.model_name
     coef = args.coef
     coef_not_provided = coef is None
+    unsupervised = control_method in ['pca']
     
     if coef_not_provided and model_name=='gemma_2_9b_it':
         coef=9.0
@@ -189,13 +190,54 @@ def main():
                         
     language_model, tokenizer = load_model(model=model_name)
     
-    controller = NeuralController(
-        language_model,
-        tokenizer,
-        control_method=control_method
-    )
+    try:
+        controller = NeuralController(
+            language_model,
+            tokenizer,
+            control_method=control_method
+        )
+        controller.load(f'{source_lang}_{dest_lang}', model_name, path='../directions/')
+    except:
+        print(f"No direction file found for {source_lang} to {dest_lang}.")
+        concept_types = [source_lang, dest_lang]
     
-    controller.load(f'{source_lang}_{dest_lang}', model_name, path='../directions/')
+        if unsupervised:
+            data = pca_programming_language_dataset(concept_types, tokenizer)
+        else:
+            data = programming_language_dataset(concept_types, tokenizer)
+
+        controllers = {}
+        for concept_type in concept_types:
+
+            other_type = [k for k in concept_types if k != concept_type][0]
+
+            train_data = data[concept_type]['train']
+
+            language_controller = NeuralController(
+                language_model,
+                tokenizer,
+                rfm_iters=8,
+                batch_size=2,
+                control_method=control_method
+            )
+
+            language_controller.compute_directions(train_data['inputs'], train_data['labels'])
+
+            controllers[concept_type] = language_controller
+
+        for concept_type in concept_types:
+            controller = controllers[concept_type]
+            other_type = [k for k in concept_types if k!=concept_type][0]
+
+            controller.save(concept=f'{concept_type}_{other_type}', model_name=model_name, path='../directions/')
+        
+        controller = NeuralController(
+            language_model,
+            tokenizer,
+            control_method=control_method
+        )
+        controller.load(f'{source_lang}_{dest_lang}', model_name, path='../directions/')
+    
     
     from datasets import load_dataset
     huggingface_dataset = load_dataset("greengerong/leetcode")

@@ -332,16 +332,10 @@ class LogisticRegressionToolkit():
             assert(len(val_X) == len(val_y))
             
             print("Training logistic regression")
-            if num_classes == 1:
-                train_y_flat = train_y.squeeze(1)
-                model = LogisticRegression(fit_intercept=False) # no bias
-            else:
-                train_y_flat = train_y.argmax(dim=1)
-                model = LogisticRegression(fit_intercept=False, multi_class='multinomial') # no bias
-            model.fit(train_X.cpu(), train_y_flat.cpu())
-
-            concept_features = torch.from_numpy(model.coef_).to(train_X.dtype)
-
+            beta, _ = direction_utils.train_logistic_probe_on_concept(train_X, train_y, val_X, val_y, num_classes=num_classes)
+            print("beta", beta.shape)
+            concept_features = beta.to(train_X.dtype).T
+            print("concept_features", concept_features.shape)
             if num_classes == 1:
                 concept_features = concept_features.reshape(1,-1)
 

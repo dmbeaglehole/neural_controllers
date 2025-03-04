@@ -2,9 +2,6 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 
-import sys
-sys.path.insert(0,'/u/dbeaglehole/recursive_feature_machines')
-
 from rfm import LaplaceRFM
 from sklearn.linear_model import LogisticRegression
 
@@ -232,10 +229,7 @@ def aggregate_projections_on_coefs(projections, detector_coef):
         X = projections[layer].cuda()
         agg_projections.append(X.squeeze(0))
     
-    # print("X", X.shape)
     agg_projections = torch.concat(agg_projections, dim=1).squeeze()
-    # print("agg_projections", agg_projections.shape)
-    # print("detector_coef", detector_coef)
     agg_beta = detector_coef[0]
     agg_bias = detector_coef[1]
     agg_preds = agg_projections@agg_beta + agg_bias
@@ -364,7 +358,8 @@ def aggregate_layers(layer_outputs, val_y, test_y, use_logistic=False, use_rfm=F
             classif=False,
             method='lstsq',
             M_batch_size=2048,
-            verbose=False
+            verbose=False,
+            return_best_params=False
         )              
         agg_preds = model.predict(test_X)
         metrics = compute_classification_metrics(agg_preds, test_y)
@@ -490,6 +485,55 @@ def train_linear_probe_on_concept(train_X, train_y, val_X, val_y, use_bias=False
             bias = best_beta[-1].item()
         else:
             bias = best_beta[-1]
+    else:
+        line = best_beta.to(train_X.device)
+        bias = 0
+        
+    return line, bias
+
+def train_logistic_probe_on_concept(train_X, train_y, val_X, val_y, use_bias=False, num_classes=1):
+    
+    val_y = val_y.cpu()
+    if num_classes == 1:
+        train_y_flat = train_y.squeeze(1).cpu()
+    else:
+        train_y_flat = train_y.argmax(dim=1).cpu()   
+
+    best_loss = float('inf')
+    best_beta = None
+    best_bias = None
+    for C in [0.01, 0.1, 1, 10, 100, 1000, 10000]:
+        multi_class = 'multinomial' if num_classes > 1 else 'ovr'
+        model = LogisticRegression(fit_intercept=False, max_iter=1000, C=C, multi_class=multi_class)
+        model.fit(train_X.cpu(), train_y_flat.cpu())
+        
+        # Get probability predictions
+        val_probs = torch.tensor(model.predict_proba(val_X.cpu()))
+        
+        # Calculate log loss
+        if num_classes == 1:
+            val_probs = val_probs[:, 1].unsqueeze(1)  # Get probs for positive class
+            val_log_loss = -torch.mean(val_y * torch.log(val_probs + 1e-8) + 
+                                     (1 - val_y) * torch.log(1 - val_probs + 1e-8))
+        else:
+            val_log_loss = -torch.mean(torch.sum(val_y * torch.log(val_probs + 1e-8), dim=1))
+        
+        if val_log_loss < best_loss:
+            best_loss = val_log_loss
+            best_beta = torch.from_numpy(model.coef_).T
+            if use_bias:
+                best_bias = torch.from_numpy(model.intercept_)
+            best_acc = accuracy_fn(val_probs, val_y)
+            best_C = C
+
+    print(f'Logistic probe loss: {best_loss}, C: {best_C}, acc: {best_acc}')
+
+    if use_bias:
+        line = best_beta.to(train_X.device)
+        if num_classes == 1:
+            bias = best_bias.item()
+        else:
+            bias = best_bias
     else:
         line = best_beta.to(train_X.device)
         bias = 0
