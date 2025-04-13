@@ -363,7 +363,7 @@ def aggregate_layers(layer_outputs, train_y, val_y, test_y, use_logistic=False, 
     print("train_X", train_X.shape, "val_X", val_X.shape, "test_X", test_X.shape)
 
     if use_rfm:
-        model = xRFM({'kernel':'l2_high_dim', 'bandwidth': 10, 'reg': 1e-3, 'iters': 5}, 
+        model = xRFM({'kernel':'l2_high_dim', 'bandwidth': 10, 'reg': 1e-3, 'iters': 10}, 
                      device='cuda', tuning_metric=tuning_metric)
         model.fit(train_X, train_y, val_X, val_y)              
         agg_preds = model.predict(test_X)
