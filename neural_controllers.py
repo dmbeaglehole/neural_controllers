@@ -364,7 +364,7 @@ class NeuralController:
             with open(detector_path, 'rb') as f:
                 self.detector_coefs = pickle.load(f)
         
-    def format_prompt(self, prompt, role='user'):
+    def format_prompt(self, prompt, role='user', steer=False):
         if self.name == 'toxicchat-t5-large':
             new_prompt = f"ToxicChat: {prompt}"
             return new_prompt
@@ -373,4 +373,5 @@ class NeuralController:
         if role=='assistant':
             chat = [{"role": "user", "content": 'Hello, assistant.'},
                     {"role": "assistant", "content": prompt}]
-        return self.tokenizer.apply_chat_template(chat, tokenize=False)
+            
+        return self.tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=steer)

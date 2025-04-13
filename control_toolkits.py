@@ -12,7 +12,7 @@ class RFMToolkit():
         pass
 
     def _compute_directions(self, data, labels, model, tokenizer, hidden_layers, hyperparams,
-                            test_data=None, test_labels=None, **kwargs):
+                            test_data=None, test_labels=None, device='cuda', **kwargs):
         
         top_eigs = kwargs.get('top_eigs', 25) 
         compare_to_linear = kwargs.get('compare_to_linear', False)
@@ -22,7 +22,7 @@ class RFMToolkit():
         train_indices, val_indices = split_indices(len(data))
         test_data_provided = test_data is not None 
         
-        all_y = labels.float().cuda()
+        all_y = labels.float().to(device)
         train_y = all_y[train_indices]
         val_y = all_y[val_indices]
         num_classes = all_y.shape[1]
@@ -32,17 +32,12 @@ class RFMToolkit():
                                 'test' : []
                             }
         
-        predictor_outputs = {
-                                'val' : [],
-                                'test' : []
-                            }
-
         hidden_states = direction_utils.get_hidden_states(data, model, tokenizer, hidden_layers, hyperparams['forward_batch_size'])
         if test_data_provided:
             test_hidden_states = direction_utils.get_hidden_states(test_data, model, tokenizer, hidden_layers, hyperparams['forward_batch_size'])
             test_direction_accs = {}
             test_predictor_accs = {}            
-            test_y = torch.tensor(test_labels).reshape(-1,1).float().cuda()
+            test_y = torch.tensor(test_labels).reshape(-1,1).float().to(device)
         
         
         
@@ -51,7 +46,7 @@ class RFMToolkit():
         detector_coefs = {}
 
         for layer_to_eval in tqdm(hidden_layers):
-            hidden_states_at_layer = hidden_states[layer_to_eval].cuda().float()
+            hidden_states_at_layer = hidden_states[layer_to_eval].to(device).float()
             train_X = hidden_states_at_layer[train_indices] 
             val_X = hidden_states_at_layer[val_indices]
                 
@@ -87,22 +82,21 @@ class RFMToolkit():
             
             if test_data_provided:
                 
-                test_X = test_hidden_states[layer_to_eval].cuda().float()
+                test_X = test_hidden_states[layer_to_eval].to(device).float()
                 
                 ### Generate predictor outputs
-                val_preds = probe_rfm.predict(val_X)
                 test_preds = probe_rfm.predict(test_X)
-                predictor_outputs['val'].append(val_preds.reshape(-1,num_classes))
-                predictor_outputs['test'].append(test_preds.reshape(-1,num_classes))
                 
                 ### Generate predictor accuracy
                 pred_acc = direction_utils.accuracy_fn(test_preds, test_y)
                 test_predictor_accs[layer_to_eval] = pred_acc
                  
                 
-                ### Generate direction outputs             
+                ### Generate direction outputs    
+                projected_train = train_X@vec         
                 projected_val = val_X@vec
                 projected_test = test_X@vec
+                direction_outputs['train'].append(projected_train.reshape(-1,n_components))
                 direction_outputs['val'].append(projected_val.reshape(-1,n_components))
                 direction_outputs['test'].append(projected_test.reshape(-1,n_components))
                 
@@ -125,15 +119,12 @@ class RFMToolkit():
                 
         
         if test_data_provided:
-            direction_agg_acc = direction_utils.aggregate_layers(direction_outputs, val_y, test_y)
+            direction_agg_acc = direction_utils.aggregate_layers(direction_outputs, train_y, val_y, test_y)
             test_direction_accs['aggregated'] = direction_agg_acc
-
-            predictor_agg_acc = direction_utils.aggregate_layers(predictor_outputs, val_y, test_y)
-            test_predictor_accs['aggregated'] = predictor_agg_acc
         
-            return directions, signs, detector_coefs, test_direction_accs, test_predictor_accs
+            return directions, signs, detector_coefs, test_direction_accs
         else: 
-            return directions, signs, detector_coefs, None, None
+            return directions, signs, detector_coefs, None
 
     def _compute_signs(self, hidden_states, all_y, directions, n_components):
         
@@ -155,22 +146,17 @@ class LinearProbeToolkit():
         pass
 
     def _compute_directions(self, data, labels, model, tokenizer, hidden_layers, hyperparams,
-                            test_data=None, test_labels=None):
+                            test_data=None, test_labels=None, device='cuda'):
                 
         train_indices, val_indices = split_indices(len(data))
         test_data_provided = test_data is not None 
         
-        all_y = labels.float().cuda()
+        all_y = labels.float().to(device)
         train_y = all_y[train_indices]
         val_y = all_y[val_indices]
         num_classes = all_y.shape[1]
         
         direction_outputs = {
-                                'val' : [],
-                                'test' : []
-                            }
-        
-        predictor_outputs = {
                                 'val' : [],
                                 'test' : []
                             }
@@ -180,7 +166,7 @@ class LinearProbeToolkit():
             test_hidden_states = direction_utils.get_hidden_states(test_data, model, tokenizer, hidden_layers, hyperparams['forward_batch_size'])
             test_direction_accs = {}
             test_predictor_accs = {}
-            test_y = torch.tensor(test_labels).reshape(-1, num_classes).float().cuda()
+            test_y = torch.tensor(test_labels).reshape(-1, num_classes).float().to(device)
             
             print('Sample test hidden states:', test_hidden_states[-1].shape, 'labels:', test_y.shape)
 
@@ -189,7 +175,7 @@ class LinearProbeToolkit():
         detector_coefs = {}
 
         for layer_to_eval in tqdm(hidden_layers):
-            hidden_states_at_layer = hidden_states[layer_to_eval].cuda().float()
+            hidden_states_at_layer = hidden_states[layer_to_eval].to(device).float()
             train_X = hidden_states_at_layer[train_indices] 
             val_X = hidden_states_at_layer[val_indices]
                 
@@ -217,13 +203,10 @@ class LinearProbeToolkit():
             
             if test_data_provided:
                
-                test_X = test_hidden_states[layer_to_eval].cuda().float()
+                test_X = test_hidden_states[layer_to_eval].to(device).float()
                 
                 ### Generate predictor outputs
-                val_preds = val_X@vec + bias
                 test_preds = test_X@vec + bias
-                predictor_outputs['val'].append(val_preds.reshape(-1,num_classes))
-                predictor_outputs['test'].append(test_preds.reshape(-1,num_classes))
                 
                 ### Generate predictor accuracy
                 pred_acc = direction_utils.accuracy_fn(test_preds, test_y)
@@ -254,14 +237,12 @@ class LinearProbeToolkit():
         
         if test_data_provided:
             print("Aggregating predictions over layers using linear stacking")
-            direction_agg_acc = direction_utils.aggregate_layers(direction_outputs, val_y, test_y)
+            direction_agg_acc = direction_utils.aggregate_layers(direction_outputs, train_y, val_y, test_y)
             test_direction_accs['aggregated'] = direction_agg_acc
 
-            predictor_agg_acc = direction_utils.aggregate_layers(predictor_outputs, val_y, test_y)
-            test_predictor_accs['aggregated'] = predictor_agg_acc
-            return directions, signs, detector_coefs, test_direction_accs, test_predictor_accs
+            return directions, signs, detector_coefs, test_direction_accs
         else: 
-            return directions, signs, detector_coefs, None, None
+            return directions, signs, detector_coefs, None
 
     def _compute_signs(self, hidden_states, all_y, directions):
         
@@ -283,7 +264,7 @@ class LogisticRegressionToolkit():
         pass
 
     def _compute_directions(self, data, labels, model, tokenizer, hidden_layers, hyperparams,
-                            test_data=None, test_labels=None):
+                            test_data=None, test_labels=None, device='cuda'):
                 
       
         test_data_provided = test_data is not None 
@@ -291,17 +272,12 @@ class LogisticRegressionToolkit():
         train_indices, val_indices = split_indices(len(data))
         test_data_provided = test_data is not None 
         
-        all_y = labels.float().cuda()
+        all_y = labels.float().to(device)
         train_y = all_y[train_indices]
         val_y = all_y[val_indices]
         num_classes = all_y.shape[1]
         
         direction_outputs = {
-                                'val' : [],
-                                'test' : []
-                            }
-        
-        predictor_outputs = {
                                 'val' : [],
                                 'test' : []
                             }
@@ -311,7 +287,7 @@ class LogisticRegressionToolkit():
             test_hidden_states = direction_utils.get_hidden_states(test_data, model, tokenizer, hidden_layers, hyperparams['forward_batch_size'])
             test_direction_accs = {}
             test_predictor_accs = {}
-            test_y = torch.tensor(test_labels).reshape(-1,num_classes).float().cuda()
+            test_y = torch.tensor(test_labels).reshape(-1,num_classes).float().to(device)
             
             print('Sample test hidden states:', test_hidden_states[-1].shape, 'labels:', test_y.shape)
 
@@ -322,7 +298,7 @@ class LogisticRegressionToolkit():
         
 
         for layer_to_eval in tqdm(hidden_layers):
-            hidden_states_at_layer = hidden_states[layer_to_eval].cuda().float()
+            hidden_states_at_layer = hidden_states[layer_to_eval].to(device).float()
             train_X = hidden_states_at_layer[train_indices] 
             val_X = hidden_states_at_layer[val_indices]
                 
@@ -353,13 +329,10 @@ class LogisticRegressionToolkit():
             
             if test_data_provided:
                 
-                test_X = test_hidden_states[layer_to_eval].cuda().float()
+                test_X = test_hidden_states[layer_to_eval].to(device).float()
                 
                 ### Generate predictor outputs
-                val_preds = torch.from_numpy(model.predict(val_X.cpu())).to(val_y.device)
                 test_preds = torch.from_numpy(model.predict(test_X.cpu())).to(test_y.device)
-                predictor_outputs['val'].append(val_preds.reshape(-1, num_classes))
-                predictor_outputs['test'].append(test_preds.reshape(-1, num_classes))
                 
                 ### Generate predictor accuracy
                 pred_acc = direction_utils.accuracy_fn(test_preds, test_y)
@@ -391,14 +364,12 @@ class LogisticRegressionToolkit():
         
         if test_data_provided:
             print("Aggregating predictions over layers using linear stacking")
-            direction_agg_acc = direction_utils.aggregate_layers(direction_outputs, val_y, test_y)
+            direction_agg_acc = direction_utils.aggregate_layers(direction_outputs, train_y, val_y, test_y)
             test_direction_accs['linear_agg'] = direction_agg_acc
 
-            predictor_agg_acc = direction_utils.aggregate_layers(predictor_outputs, val_y, test_y)
-            test_predictor_accs['linear_agg'] = predictor_agg_acc
-            return directions, signs, detector_coefs, test_direction_accs, test_predictor_accs
+            return directions, signs, detector_coefs, test_direction_accs
         else: 
-            return directions, signs, detector_coefs, None, None
+            return directions, signs, detector_coefs, None
 
     def _compute_signs(self, hidden_states, all_y, directions):
         
@@ -420,12 +391,12 @@ class MeanDifferenceToolkit():
         pass
 
     def _compute_directions(self, data, labels, model, tokenizer, hidden_layers, hyperparams,
-                            test_data=None, test_labels=None):
+                            test_data=None, test_labels=None, device='cuda'):
                 
         train_indices, val_indices = split_indices(len(data))
         test_data_provided = test_data is not None 
         
-        all_y = labels.float().cuda()
+        all_y = labels.float().to(device)
         train_y = all_y[train_indices]
         val_y = all_y[val_indices]
         
@@ -437,7 +408,7 @@ class MeanDifferenceToolkit():
         if test_data_provided:
             test_hidden_states = direction_utils.get_hidden_states(test_data, model, tokenizer, hidden_layers, hyperparams['forward_batch_size'])
             test_direction_accs = {}
-            test_y = torch.tensor(test_labels).reshape(-1,1).float().cuda()
+            test_y = torch.tensor(test_labels).reshape(-1,1).float().to(device)
             
             print('Sample test hidden states:', test_hidden_states[-1].shape, 'labels:', test_y.shape)
 
@@ -449,7 +420,7 @@ class MeanDifferenceToolkit():
         directions = {}
 
         for layer_to_eval in tqdm(hidden_layers):
-            hidden_states_at_layer = hidden_states[layer_to_eval].cuda().float()
+            hidden_states_at_layer = hidden_states[layer_to_eval].to(device).float()
             train_X = hidden_states_at_layer[train_indices]
             val_X = hidden_states_at_layer[val_indices]
             
@@ -470,7 +441,7 @@ class MeanDifferenceToolkit():
             
             if test_data_provided:
                
-                test_X = test_hidden_states[layer_to_eval].cuda().float()
+                test_X = test_hidden_states[layer_to_eval].to(device).float()
                 
                 # learn the shift on training data
                 mean_dif_vec = concept_features.reshape(-1).to(device=train_X.device)
@@ -495,7 +466,7 @@ class MeanDifferenceToolkit():
                 
         if test_data_provided:
             print("Aggregating predictions over layers using linear stacking")
-            direction_agg_acc = direction_utils.aggregate_layers(direction_outputs, val_y, test_y)
+            direction_agg_acc = direction_utils.aggregate_layers(direction_outputs, train_y, val_y, test_y)
             test_direction_accs['linear_agg'] = direction_agg_acc
             return directions, None, test_direction_accs, None
         else: 
@@ -507,12 +478,12 @@ class PCAToolkit():
         pass
 
     def _compute_directions(self, data, labels, model, tokenizer, hidden_layers, hyperparams,
-                            test_data=None, test_labels=None):
+                            test_data=None, test_labels=None, device='cuda'):
                 
         train_indices, val_indices = split_indices(len(data))
         test_data_provided = test_data is not None 
         
-        all_y = labels.float().cuda()
+        all_y = labels.float().to(device)
         train_y = all_y[train_indices]
         val_y = all_y[val_indices]
         
@@ -523,7 +494,7 @@ class PCAToolkit():
         if test_data_provided:
             test_hidden_states = direction_utils.get_hidden_states(test_data, model, tokenizer, hidden_layers, hyperparams['forward_batch_size'])
             test_direction_accs = {}
-            test_y = torch.tensor(test_labels).reshape(-1,1).float().cuda()
+            test_y = torch.tensor(test_labels).reshape(-1,1).float().to(device)
             
             print('Sample test hidden states:', test_hidden_states[-1].shape, 'labels:', test_y.shape)
         
@@ -535,7 +506,7 @@ class PCAToolkit():
         directions = {}
 
         for layer_to_eval in tqdm(hidden_layers):
-            hidden_states_at_layer = hidden_states[layer_to_eval].cuda().float()
+            hidden_states_at_layer = hidden_states[layer_to_eval].to(device).float()
             train_X = hidden_states_at_layer[train_indices]
             val_X = hidden_states_at_layer[val_indices]
                 
@@ -552,7 +523,7 @@ class PCAToolkit():
             
             if test_data_provided:
                
-                test_X = test_hidden_states[layer_to_eval].cuda().float()
+                test_X = test_hidden_states[layer_to_eval].to(device).float()
 
                 # learn the shift on training data
                 beta = concept_features.reshape(-1).to(device=train_X.device)
@@ -583,11 +554,11 @@ class PCAToolkit():
         
         if test_data_provided:
             print("Aggregating predictions over layers using linear stacking")
-            direction_agg_acc = direction_utils.aggregate_layers(direction_outputs, val_y, test_y)
+            direction_agg_acc = direction_utils.aggregate_layers(direction_outputs, train_y, val_y, test_y)
             test_direction_accs['linear_agg'] = direction_agg_acc
-            return directions, signs, None, test_direction_accs, None
+            return directions, signs, None, test_direction_accs
         else: 
-            return directions, signs, None, None, None
+            return directions, signs, None, None
 
     def _compute_signs(self, hidden_states, all_y, directions):
         

@@ -11,6 +11,34 @@ from datasets import load_dataset
 import json
 import os
 
+import torch.nn as nn
+import torch.nn.functional as F
+
+class SmoothClampedReLU(nn.Module):
+    def __init__(self, beta=50):
+        super(SmoothClampedReLU, self).__init__()
+        self.beta = beta
+        
+    def forward(self, x):
+        # Smooth transition at x=0 (using softplus with high beta)
+        activated = F.softplus(x, beta=self.beta)
+        # Smooth transition at x=1 (using sigmoid scaled and shifted)
+        # As x approaches infinity, this approaches 1
+        clamped = activated - F.softplus(activated - 1, beta=self.beta)
+        
+        return clamped
+
+def preds_to_proba(preds, eps=1e-3, proba_beta=50):
+    if preds.shape[1] == 1:
+        smooth_clamped = SmoothClampedReLU(beta=proba_beta)
+        preds = smooth_clamped(preds)
+    else:
+        min_preds = preds.min(dim=1, keepdim=True).values
+        max_preds = preds.max(dim=1, keepdim=True).values 
+        preds = (preds - min_preds) / (max_preds - min_preds) # normalize predictions to [0, 1]
+        preds = torch.clamp(preds, eps, 1-eps) # clamp predictions to [eps, 1-eps]
+        preds /= preds.sum(dim=1, keepdim=True) # normalize predictions to sum to 1
+    return preds
     
 def split_indices(N, frac=0.2, max_val_count=256, random_split=False):
     n_train = N - min(int(frac*N), max_val_count)
@@ -420,8 +448,9 @@ def pca_language_dataset(data_dir, concept_types, tokenizer, seed=0):
             
             
             # same lang
+            idx = max(len(old)//2, 1)
             partial = old[:idx]
-            prompt = user_template.format(orig_lang=orig_lang, new_lang=other_lang, 
+            prompt = user_template.format(orig_lang=orig_lang, new_lang=orig_lang, 
                                                 statement=old, partial=partial)
             
             chat = [
@@ -670,7 +699,7 @@ def supervised_language_dataset(data_dir, concept_types, tokenizer, seed=0):
     return formatted_data
 
 
-def programming_language_dataset(concept_types, tokenizer):
+def programming_language_dataset(concept_types, tokenizer, n=300):
     random.seed(0)
 
     user_template = 'Complete the translation of the following program in {orig_lang} to {new_lang}. \nProgram:\n```{program}```\nTranslation:\n```{partial}'
@@ -699,14 +728,19 @@ def programming_language_dataset(concept_types, tokenizer):
         orig_lang = concept_type
         other_lang = [k for k in raw_data.keys() if k != orig_lang][0]
         
-        n = 400 # correction to make distinct test class
+        n = 500 # correction to make distinct test class
         c_e, o_e = raw_data[orig_lang][:n], raw_data[other_lang][:n]
         
         
         orig_texts = c_e + c_e
         new_texts = c_e + o_e
-        labels = [0 for _ in range(n)] + [1 for _ in range(n)]
-        new_langs = [orig_lang for _ in range(n)] + [other_lang for _ in range(n)]
+
+        num_samples = min(len(orig_texts), len(new_texts))
+        orig_texts = orig_texts[:num_samples]
+        new_texts = new_texts[:num_samples]
+        pos_len = min(len(c_e), len(o_e))
+        labels = [0 for _ in range(len(c_e))] + [1 for _ in range(pos_len)]
+        new_langs = [orig_lang for _ in range(len(c_e))] + [other_lang for _ in range(pos_len)]
 
         data = []
         for old, new, new_lang in zip(orig_texts, new_texts, new_langs):
@@ -740,13 +774,11 @@ def programming_language_dataset(concept_types, tokenizer):
         labels = list(labels)
         
         
-        n_train = 300
-        n_test = 300
-        concept_train_data = data[:n_train]
-        concept_test_data = data[n_train:n_train+n_test]
+        concept_train_data = data[:n]
+        concept_test_data = data[n:2*n]
         
-        train_labels = labels[:n_train]
-        test_labels = labels[n_train:n_train+n_test]
+        train_labels = labels[:n]
+        test_labels = labels[n:2*n]
         
         print("train", len(concept_train_data), "test", len(concept_test_data))
 
@@ -757,7 +789,7 @@ def programming_language_dataset(concept_types, tokenizer):
     return formatted_data
 
 
-def pca_programming_language_dataset(concept_types, tokenizer):
+def pca_programming_language_dataset(concept_types, tokenizer, n_pairs=150):
     random.seed(0)
 
     user_template = 'Complete the translation of the following program in {orig_lang} to {new_lang}. \nProgram:\n```{program}```\nTranslation:\n```{partial}'
@@ -812,8 +844,9 @@ def pca_programming_language_dataset(concept_types, tokenizer):
             
             
             # same lang
+            idx = max(len(old)//2, 1)
             partial = old[:idx]
-            prompt = user_template.format(orig_lang=orig_lang, new_lang=other_lang, 
+            prompt = user_template.format(orig_lang=orig_lang, new_lang=orig_lang, 
                                                 program=old, partial=partial)
             
             chat = [
@@ -827,9 +860,8 @@ def pca_programming_language_dataset(concept_types, tokenizer):
             data.append(pair)
             
             
-        n = 150
-        train_data = data[:n]
-        test_data = data[n:2*n]
+        train_data = data[:n_pairs]
+        test_data = data[n_pairs:2*n_pairs]
 
         train_labels = []
         for d in train_data:
@@ -837,7 +869,6 @@ def pca_programming_language_dataset(concept_types, tokenizer):
             random.shuffle(d)
             train_labels.append([s == true_s for s in d])
         
-        # train_labels = np.concatenate(train_labels).tolist()
         test_labels = [[1,0] for _ in range(len(test_data))]
         
         train_data = np.concatenate(train_data).tolist()
@@ -1191,7 +1222,6 @@ def honesty_dataset(data_path, tokenizer, assistant_tag, seed: int = 0):
         new_prompt = tokenizer.apply_chat_template(chat, tokenize=False)
         new_prompt += assistant_tag
         new_prompt += prompt[1]
-        # print("new_prompt", new_prompt)
         train_data.append(new_prompt)
 
     # Create test data
@@ -1209,7 +1239,6 @@ def honesty_dataset(data_path, tokenizer, assistant_tag, seed: int = 0):
         new_prompt = tokenizer.apply_chat_template(chat, tokenize=False)
         new_prompt += assistant_tag
         new_prompt += prompt[1]
-        # print("new_prompt", new_prompt)
         test_data.append(new_prompt)
 
     print(f"Train data: {len(train_data)}")
