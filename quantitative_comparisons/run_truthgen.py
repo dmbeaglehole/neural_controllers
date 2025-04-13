@@ -120,7 +120,7 @@ def create_positive_negative_pairs(inputs, labels, max_pairs):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--control_method', type=str, default='rfm')
-    parser.add_argument('--model_name', type=str, default='llama_3_8b_it')
+    parser.add_argument('--model_name', type=str, default='llama_3.3_70b_4bit_it')
     parser.add_argument('--n_seeds', type=int, default=5)
     parser.add_argument('--n_train', type=int, default=2000)
     parser.add_argument('--n_val', type=int, default=1500)
@@ -215,8 +215,10 @@ def main():
         except:
             controller.compute_directions(train_inputs, train_labels)
             controller.save(concept='truthgen_large_seed_'+str(seed), model_name=model_name, path='../directions/')
+
         
         val_metrics, test_metrics, _ = controller.evaluate_directions(
+            train_inputs, train_labels,
             val_inputs, val_labels,
             test_inputs, test_labels,
             n_components=n_components,

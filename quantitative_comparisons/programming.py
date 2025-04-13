@@ -40,17 +40,9 @@ def control_language(program, controller, layers_to_control, coef, dest_lang, to
     template += "Do not include an explanation.\n\n```{program}```"
     
     prompt = template.format(program=program)
-
+    formatted_prompt = controller.format_prompt(prompt, steer=True)
     
-    chat = [
-              {
-                "role": "user", 
-                "content": prompt
-              },
-    ]
-    new_prompt = tokenizer.apply_chat_template(chat, tokenize=False)
-    
-    whole_generation = controller.generate(new_prompt, 
+    whole_generation = controller.generate(formatted_prompt, 
                                      layers_to_control=layers_to_control, 
                                      control_coef=coef, 
                                      max_new_tokens=num_new_tokens, 
@@ -59,8 +51,8 @@ def control_language(program, controller, layers_to_control, coef, dest_lang, to
     
     
     print("-"*50 + '\n')
-    print("prompt:\n", new_prompt)
-    generation = whole_generation[len(new_prompt):]
+    print("prompt:\n", formatted_prompt)
+    generation = whole_generation[len(formatted_prompt):]
     print("generation (without prompt):\n", generation)
     generation = extract_code(generation, extract_type=dest_lang)
     print("extracted code:\n", generation)

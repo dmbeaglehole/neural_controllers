@@ -20,6 +20,8 @@ import gc
 
 from bs4 import BeautifulSoup
 
+NEURAL_CONTROLLERS_DIR = os.environ['NEURAL_CONTROLLERS_DIR']
+
 def create_paired_data(pos_examples, neg_examples):
     # Ensure we have enough examples of each class
     min_len = min(len(pos_examples), len(neg_examples))
@@ -81,7 +83,7 @@ def modify(s):
 
 def get_fava_annotated_data(tokenizer):
     # Specify the path to your JSON file
-    file_path = '../data/hallucinations/annotations.json'
+    file_path = f'{NEURAL_CONTROLLERS_DIR}/data/hallucinations/annotations.json'
 
     # Open and read the JSON file
     with open(file_path, 'r') as file:
@@ -108,7 +110,7 @@ def get_fava_training_data(tokenizer, unsupervised=False, max_n=10000):
     completions = ds['train']['completion']
 
     # Try to load saved shuffle indices
-    shuffle_indices_path = './fava_annotated_results/fava_shuffle_indices.pkl'
+    shuffle_indices_path = f'{NEURAL_CONTROLLERS_DIR}/results/fava_annotated_results/fava_shuffle_indices.pkl'
     try:
         with open(shuffle_indices_path, 'rb') as f:
             indices = pickle.load(f)
@@ -158,7 +160,7 @@ def get_splits(n_train, n_val, n_total, n_seeds):
     """
     Create splits for training, validation, and testing datasets.
     """
-    out_name = f'./fava_annotated_results/splits_ntrain_{n_train}_nval_{n_val}_ntotal_{n_total}_nseeds_{n_seeds}.pkl'
+    out_name = f'{NEURAL_CONTROLLERS_DIR}/results/fava_annotated_results/splits_ntrain_{n_train}_nval_{n_val}_ntotal_{n_total}_nseeds_{n_seeds}.pkl'
     try:
         with open(out_name, 'rb') as f:
             splits = pickle.load(f)
@@ -190,8 +192,8 @@ def get_splits(n_train, n_val, n_total, n_seeds):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--control_method', type=str, default='rfm')
-    parser.add_argument('--model_name', type=str, default='llama_3_8b_it')
-    parser.add_argument('--n_seeds', type=int, default=20)
+    parser.add_argument('--model_name', type=str, default='llama_3.3_70b_4bit_it')
+    parser.add_argument('--n_seeds', type=int, default=5)
     parser.add_argument('--n_train', type=int, default=0)
     parser.add_argument('--n_val', type=int, default=360)
     parser.add_argument('--n_components', type=int, default=3)
@@ -259,13 +261,15 @@ def main():
 
         nval = len(val_inputs)
         ntest = len(test_inputs)
-        out_name = f'./fava_annotated_results/{control_method}_data_counts_seed_{seed}.pkl'
+        results_dir = f'{NEURAL_CONTROLLERS_DIR}/results/fava_annotated_results'
+        os.makedirs(results_dir, exist_ok=True)
+        out_name = f'{results_dir}/{control_method}_data_counts_seed_{seed}.pkl'
         with open(out_name, 'wb') as f:
             counts = {'val':nval, 'test':ntest}
             pickle.dump(counts, f)
         
         try:
-            controller.load(concept='fava_training', model_name=model_name, path='../directions/')
+            controller.load(concept='fava_training', model_name=model_name, path=f'{NEURAL_CONTROLLERS_DIR}/directions/')
         except:
             train_inputs, train_labels = get_fava_training_data(tokenizer, unsupervised=unsupervised)
 
@@ -278,12 +282,13 @@ def main():
                 batch_size=1
             )
             controller.compute_directions(train_inputs, train_labels)
-            controller.save(concept='fava_training', model_name=model_name, path='../directions/')
+            controller.save(concept='fava_training', model_name=model_name, path=f'{NEURAL_CONTROLLERS_DIR}/directions/')
               
         assert(len(val_inputs) > 0)
         assert(len(test_inputs) > 0)
         
         val_metrics, test_metrics, _ = controller.evaluate_directions(
+            train_inputs, train_labels,
             val_inputs, val_labels,
             test_inputs, test_labels,
             n_components=n_components,
@@ -292,11 +297,11 @@ def main():
             unsupervised=unsupervised
         )
         
-        out_name = f'./fava_annotated_results/{model_name}_{original_control_method}_seed_{seed}_val_metrics.pkl'
+        out_name = f'{results_dir}/{model_name}_{original_control_method}_seed_{seed}_val_metrics.pkl'
         with open(out_name, 'wb') as f:
             pickle.dump(val_metrics, f)
 
-        out_name = f'./fava_annotated_results/{model_name}_{original_control_method}_seed_{seed}_test_metrics.pkl'
+        out_name = f'{results_dir}/{model_name}_{original_control_method}_seed_{seed}_test_metrics.pkl'
         with open(out_name, 'wb') as f:
             pickle.dump(test_metrics, f)
             

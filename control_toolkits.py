@@ -4,6 +4,7 @@ from sklearn.linear_model import LogisticRegression
 import direction_utils
 from utils import split_indices
 
+import time
 from tqdm import tqdm
 
 
@@ -14,7 +15,6 @@ class RFMToolkit():
     def _compute_directions(self, data, labels, model, tokenizer, hidden_layers, hyperparams,
                             test_data=None, test_labels=None, device='cuda', **kwargs):
         
-        top_eigs = kwargs.get('top_eigs', 25) 
         compare_to_linear = kwargs.get('compare_to_linear', False)
         log_spectrum = kwargs.get('log_spectrum', False)
         log_path = kwargs.get('log_path', None)
@@ -55,21 +55,28 @@ class RFMToolkit():
             assert(len(train_X) == len(train_y))
             assert(len(val_X) == len(val_y))
 
-            probe_rfm = direction_utils.train_rfm_probe_on_concept(train_X, train_y, val_X, val_y, hyperparams)
-            concept_features = probe_rfm.M
+            start_time = time.time()
+            rfm_probe = direction_utils.train_rfm_probe_on_concept(train_X, train_y, val_X, val_y, hyperparams)
+            end_time = time.time()
+            print(f"Time taken to train rfm probe: {end_time - start_time} seconds")
+            concept_features = rfm_probe.collect_best_agops()[0]
 
             if compare_to_linear:
                 _ = direction_utils.train_linear_probe_on_concept(train_X, train_y, val_X, val_y)
     
-            S, U = torch.linalg.eigh(concept_features)
+            # S, U = torch.linalg.eigh(concept_features)
+            start_time = time.time()
+            S, U = torch.lobpcg(concept_features, k=n_components)
+            end_time = time.time()
+            print(f"Time taken to compute eigenvectors: {end_time - start_time} seconds")
 
             if log_spectrum:
                 spectrum_filename = log_path + f'_layer_{layer_to_eval}.pt'
                 print("spectrum_filename", spectrum_filename)
-                torch.save(S[-top_eigs:].cpu(), spectrum_filename)
+                torch.save(S.cpu(), spectrum_filename)
 
-            components = U[:,-n_components:].T
-            directions[layer_to_eval] = torch.flip(components, dims=(0,))
+            components = U.T
+            directions[layer_to_eval] = components
             
             
             ### Generate direction accuracy
@@ -85,7 +92,7 @@ class RFMToolkit():
                 test_X = test_hidden_states[layer_to_eval].to(device).float()
                 
                 ### Generate predictor outputs
-                test_preds = probe_rfm.predict(test_X)
+                test_preds = rfm_probe.predict(test_X)
                 
                 ### Generate predictor accuracy
                 pred_acc = direction_utils.accuracy_fn(test_preds, test_y)

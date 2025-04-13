@@ -61,10 +61,25 @@ def load_model(model):
         language_model = AutoModelForCausalLM.from_pretrained(
             model_id, device_map="cuda"
         )
-
         use_fast_tokenizer = "LlamaForCausalLM" not in language_model.config.architectures
         tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=use_fast_tokenizer, padding_side="left", legacy=False)
         
+    elif model=='llama_3.3_70b_4bit_it':
+        model_id = "unsloth/Llama-3.3-70B-Instruct-bnb-4bit"
+        language_model = AutoModelForCausalLM.from_pretrained(
+            model_id, device_map="cuda"
+        )   
+        use_fast_tokenizer = "LlamaForCausalLM" not in language_model.config.architectures
+        tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=use_fast_tokenizer, padding_side="left", legacy=False)
+
+    elif model=='llama_3.3_70b_it':
+        model_id = "meta-llama/Llama-3.3-70B-Instruct"
+        language_model = AutoModelForCausalLM.from_pretrained(
+            model_id, device_map="auto"
+        )   
+        use_fast_tokenizer = "LlamaForCausalLM" not in language_model.config.architectures
+        tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=use_fast_tokenizer, padding_side="left", legacy=False)
+
     elif model=='gemma_2_9b_it':
         tokenizer = AutoTokenizer.from_pretrained("google/gemma-2-9b-it")
         language_model = AutoModelForCausalLM.from_pretrained(

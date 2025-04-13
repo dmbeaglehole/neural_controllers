@@ -1,6 +1,7 @@
 import argparse
 import sys
 from pathlib import Path
+import os
 
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -13,16 +14,19 @@ import numpy as np
 import pickle
 import random
 random.seed(0)
+
+NEURAL_CONTROLLERS_DIR = os.environ['NEURAL_CONTROLLERS_DIR']
+
 def get_data(controller):
     # Function to load a JSON file
     def load_json(file_path):
         with open(file_path, 'r') as file:
             return json.load(file)
 
-    benign_val_path = '../data/agentharm/benign_behaviors_validation.json'
-    benign_test_path = '../data/agentharm/benign_behaviors_test_public.json'
-    harmful_val_path = '../data/agentharm/harmful_behaviors_validation.json'
-    harmful_test_path = '../data/agentharm/harmful_behaviors_test_public.json'
+    benign_val_path = f'{NEURAL_CONTROLLERS_DIR}/data/agentharm/benign_behaviors_validation.json'
+    benign_test_path = f'{NEURAL_CONTROLLERS_DIR}/data/agentharm/benign_behaviors_test_public.json'
+    harmful_val_path = f'{NEURAL_CONTROLLERS_DIR}/data/agentharm/harmful_behaviors_validation.json'
+    harmful_test_path = f'{NEURAL_CONTROLLERS_DIR}/data/agentharm/harmful_behaviors_test_public.json'
 
     # Load the files
     benign_val_data_ = load_json(benign_val_path)['behaviors']
@@ -73,8 +77,8 @@ def create_paired_data(pos_examples, neg_examples):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--control_method', type=str, default='linear')
-    parser.add_argument('--model_name', type=str, default='llama_3_8b_it')
+    parser.add_argument('--control_method', type=str, default='rfm')
+    parser.add_argument('--model_name', type=str, default='llama_3_8b_it')#'llama_3.3_70b_4bit_it')
     parser.add_argument('--n_components', type=int, default=2)
     args = parser.parse_args()
     for n_, v_ in args.__dict__.items():
@@ -113,7 +117,7 @@ def main():
         tokenizer,
         control_method=control_method,
         batch_size=1,
-        rfm_iters=8
+        rfm_iters=10
     )
     
     val_inputs, val_labels, test_inputs, test_labels = get_data(controller)
@@ -131,7 +135,9 @@ def main():
 
     nval = len(val_inputs)
     ntest = len(test_inputs)
-    out_name = f'./agentharm_results/{control_method}_data_counts.pkl'
+    results_dir = f'{NEURAL_CONTROLLERS_DIR}/results/agentharm_results'
+    os.makedirs(results_dir, exist_ok=True)
+    out_name = f'{results_dir}/{control_method}_data_counts.pkl'
     with open(out_name, 'wb') as f:
         counts = {'val':nval, 'test':ntest}
         pickle.dump(counts, f)
@@ -147,18 +153,19 @@ def main():
         train_labels = val_labels
     
     try:
-        controller.load(concept='agentharm', model_name=model_name, path='../directions/')
+        controller.load(concept='agentharm', model_name=model_name, path=f'{NEURAL_CONTROLLERS_DIR}/directions/')
     except:
         controller.compute_directions(train_inputs, train_labels)
-        controller.save(concept='agentharm', model_name=model_name, path='../directions/')
+        controller.save(concept='agentharm', model_name=model_name, path=f'{NEURAL_CONTROLLERS_DIR}/directions/')
             
             
     assert(len(val_inputs)==len(val_labels))
     assert(len(test_inputs)==len(test_labels))
-    print("val_inputs", len(val_inputs), "test_inputs", len(test_inputs), 
-          "val_labels", len(val_labels), "test_labels", len(test_labels))
+    print("Val inputs:", len(val_inputs), "Test inputs:", len(test_inputs), 
+          "Val labels:", len(val_labels), "Test labels:", len(test_labels))
     
     val_metrics, test_metrics, _ = controller.evaluate_directions(
+                                    train_inputs, train_labels,
                                     val_inputs, val_labels,
                                     test_inputs, test_labels,
                                     n_components=n_components,
@@ -166,12 +173,14 @@ def main():
                                     use_rfm=use_rfm,
                                     unsupervised=unsupervised
                                 )
-            
-    out_name = f'./agentharm_results/{model_name}_{original_control_method}_val_metrics.pkl'
+
+    results_dir = f'{NEURAL_CONTROLLERS_DIR}/results/agentharm_results'
+    os.makedirs(results_dir, exist_ok=True)
+    out_name = f'{results_dir}/{model_name}_{original_control_method}_val_metrics.pkl'
     with open(out_name, 'wb') as f:
         pickle.dump(val_metrics, f)
 
-    out_name = f'./agentharm_results/{model_name}_{original_control_method}_test_metrics.pkl'
+    out_name = f'{results_dir}/{model_name}_{original_control_method}_test_metrics.pkl'
     with open(out_name, 'wb') as f:
         pickle.dump(test_metrics, f)
 

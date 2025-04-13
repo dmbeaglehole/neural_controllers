@@ -17,6 +17,8 @@ import gc
 import random
 random.seed(0)
 
+NEURAL_CONTROLLERS_DIR = os.environ['NEURAL_CONTROLLERS_DIR']
+
 def clean(prompts):
     new_prompts = []
     for p in prompts:
@@ -91,7 +93,7 @@ def create_positive_negative_pairs(inputs, labels, max_pairs):
 
 def get_halu_eval_data(tokenizer, hal_type):
     if hal_type=='qa':
-        data_path = "../data/hallucinations/halu_eval/qa_data.txt"
+        data_path = f'{NEURAL_CONTROLLERS_DIR}/data/hallucinations/halu_eval/qa_data.txt'
         unwrapped_template = 'Consider the factuality of the following question and answer.\n\nQ: {question}\n\nA: {answer}'
         chat = [
             {
@@ -130,7 +132,7 @@ def get_halu_eval_data(tokenizer, hal_type):
             
     elif hal_type=='general':
         # Get QA data for training
-        qa_data_path = "../data/hallucinations/halu_eval/qa_data.txt"
+        qa_data_path = f'{NEURAL_CONTROLLERS_DIR}/data/hallucinations/halu_eval/qa_data.txt'
         unwrapped_qa_template = 'Consider the factuality of the following question and answer.\n\nQ: {question}\n\nA: {answer}'
         chat = [
             {
@@ -159,7 +161,7 @@ def get_halu_eval_data(tokenizer, hal_type):
             train_labels += [1,0]
             
         # Get general data for evaluation
-        data_path = "../data/hallucinations/halu_eval/general_data.txt"
+        data_path = f'{NEURAL_CONTROLLERS_DIR}/data/hallucinations/halu_eval/general_data.txt'
         unwrapped_template = 'Consider the response to the following query.\n\nQuery: {query}\n\nResponse: {response}'
         chat = [
             {
@@ -221,7 +223,7 @@ def get_splits(n_val, n_total, n_seeds, hal_type):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--control_method', type=str, default='rfm')
-    parser.add_argument('--model_name', type=str, default='llama_3_8b_it')
+    parser.add_argument('--model_name', type=str, default='llama_3.3_70b_4bit_it')
     parser.add_argument('--n_components', type=int, default=2)
     parser.add_argument('--hal_type', type=str, default='qa')
     parser.add_argument('--n_seeds', type=int, default=5)
@@ -285,10 +287,10 @@ def main():
         train_labels = np.concatenate(train_pair_labels).tolist()
             
     try:
-        controller.load(concept='halu_eval_detect', model_name=model_name, path='../directions/')
+        controller.load(concept='halu_eval_detect', model_name=model_name, path=f'{NEURAL_CONTROLLERS_DIR}/directions/')
     except:
         controller.compute_directions(train_inputs, train_labels)
-        controller.save(concept='halu_eval_detect', model_name=model_name, path='../directions/')
+        controller.save(concept='halu_eval_detect', model_name=model_name, path=f'{NEURAL_CONTROLLERS_DIR}/directions/')
 
     # Changed to split the test set instead of train set
     splits = get_splits(n_val=len(test_inputs)//2, n_total=len(test_inputs), n_seeds=n_seeds, hal_type=hal_type)
@@ -305,7 +307,7 @@ def main():
         ntrain  = len(train_inputs)
         nval = len(split_val_inputs)
         ntest = len(final_test_inputs)
-        out_name = f'./halu_eval_results/{hal_type}_{control_method}_data_counts_seed_{seed}.pkl'
+        out_name = f'{NEURAL_CONTROLLERS_DIR}/results/halu_eval_results/{hal_type}_{control_method}_data_counts_seed_{seed}.pkl'
         with open(out_name, 'wb') as f:
             counts = {'train':ntrain, 'val':nval, 'test':ntest}
             pickle.dump(counts, f)
@@ -316,6 +318,7 @@ def main():
             "val_labels", len(split_val_labels), "test_labels", len(final_test_labels))
         
         val_metrics, test_metrics, _ = controller.evaluate_directions(
+            train_inputs, train_labels,
             split_val_inputs, split_val_labels,
             final_test_inputs, final_test_labels,
             n_components=n_components,
@@ -326,11 +329,13 @@ def main():
         
         trivial_acc = max((sum(final_test_labels)/len(final_test_labels)), 1-(sum(final_test_labels)/len(final_test_labels)))*100
         
-        out_name = f'./halu_eval_results/{model_name}_{original_control_method}_seed_{seed}_{hal_type}_val_metrics.pkl'
+        results_dir = f'{NEURAL_CONTROLLERS_DIR}/results/halu_eval_results'
+        os.makedirs(results_dir, exist_ok=True)
+        out_name = f'{results_dir}/{model_name}_{original_control_method}_seed_{seed}_{hal_type}_val_metrics.pkl'
         with open(out_name, 'wb') as f:
             pickle.dump(val_metrics, f)
 
-        out_name = f'./halu_eval_results/{model_name}_{original_control_method}_seed_{seed}_{hal_type}_test_metrics.pkl'
+        out_name = f'{results_dir}/{model_name}_{original_control_method}_seed_{seed}_{hal_type}_test_metrics.pkl'
         with open(out_name, 'wb') as f:
             test_metrics['trivial_acc'] = trivial_acc
             pickle.dump(test_metrics, f)

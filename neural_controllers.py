@@ -115,7 +115,7 @@ class NeuralController:
         if not isinstance(labels, torch.Tensor):
             labels = torch.tensor(labels).reshape(-1,1)
             
-        self.directions, self.signs, self.detector_coefs, _, _ = self.toolkit._compute_directions(data, 
+        self.directions, self.signs, self.detector_coefs, _ = self.toolkit._compute_directions(data, 
                                                            labels, 
                                                            self.model, 
                                                            self.tokenizer, 
@@ -139,7 +139,7 @@ class NeuralController:
             test_labels = torch.tensor(test_labels).reshape(-1,1)
             
         
-        self.directions, self.signs, self.detector_coefs, direction_accs, predictor_accs = self.toolkit._compute_directions(
+        self.directions, self.signs, self.detector_coefs, direction_accs = self.toolkit._compute_directions(
                                                            train_data, 
                                                            train_labels, 
                                                            self.model, 
@@ -151,9 +151,10 @@ class NeuralController:
                                                            **kwargs
                                                           )
         
-        return direction_accs, predictor_accs
+        return direction_accs
     
     def evaluate_directions(self,
+                            train_data, train_labels,
                             val_data, val_labels,
                             test_data, test_labels,
                             hidden_layers=None, 
@@ -168,20 +169,33 @@ class NeuralController:
             hidden_layers = self.hidden_layers
         self.hidden_layers = hidden_layers
 
+        if not isinstance(train_labels, torch.Tensor):
+            train_labels = torch.tensor(train_labels).reshape(-1,1)
         if not isinstance(val_labels, torch.Tensor):
             val_labels = torch.tensor(val_labels).reshape(-1,1)
         if not isinstance(test_labels, torch.Tensor):
             test_labels = torch.tensor(test_labels).reshape(-1,1)
-
+        
+        if len(train_labels.shape) == 1:
+            train_labels = train_labels.reshape(-1,1)
         if len(val_labels.shape) == 1:
             val_labels = val_labels.reshape(-1,1)
         if len(test_labels.shape) == 1:
             test_labels = test_labels.reshape(-1,1)
         
+        train_y = train_labels.to(self.model.device).float()
         val_y = val_labels.to(self.model.device).float()
         test_y = test_labels.to(self.model.device).float()
         assert(val_y.shape[1]==test_y.shape[1])
 
+        train_hidden_states = direction_utils.get_hidden_states(train_data, 
+                                                                self.model, 
+                                                                self.tokenizer, 
+                                                                hidden_layers, 
+                                                                self.hyperparams['forward_batch_size'],
+                                                                all_positions=agg_positions
+                                                                )
+        
         val_hidden_states = direction_utils.get_hidden_states(val_data, 
                                                               self.model, 
                                                               self.tokenizer, 
@@ -199,6 +213,7 @@ class NeuralController:
                                                              )
         
         projections = {
+                        'train' : [],
                         'val' : [],
                         'test' : []
                     }
@@ -212,6 +227,9 @@ class NeuralController:
                 direction = torch.from_numpy(direction)
             direction = direction.to(self.model.device).float()[:n_components]
             direction = direction.T
+
+            train_X = train_hidden_states[layer_to_eval].cuda().float()
+            projected_train = train_X@direction
             
             val_X = val_hidden_states[layer_to_eval].cuda().float()
             projected_val = val_X@direction
@@ -222,12 +240,12 @@ class NeuralController:
             if agg_positions:
                 projected_val = torch.mean(projected_val, dim=1) # mean projection
                 projected_test = torch.mean(projected_test, dim=1) # mean projection
-                            
+                projected_train = torch.mean(projected_train, dim=1) # mean projection
+    
             if use_logistic:
                 beta, b = direction_utils.logistic_solve(projected_val, val_y)
             else:
                 beta, b = direction_utils.linear_solve(projected_val, val_y)
-            print("Learned beta:", beta, "Learned intercept", b)
             
             detector_coefs[layer_to_eval] = [beta, b]
      
@@ -237,23 +255,27 @@ class NeuralController:
                 
                 projected_val_preds = projected_val
                 projected_val_preds = torch.where(projected_val_preds>0, 1, 0)
+                
+                projected_train_preds = projected_train
+                projected_train_preds = torch.where(projected_train_preds>0, 1, 0)
             else: # evaluate slope, intercept on test data
                 projected_val_preds = projected_val@beta + b
                 projected_test_preds = projected_test@beta + b
-       
+                projected_train_preds = projected_train@beta + b
+
             assert(projected_test_preds.shape==test_y.shape)
             
-            val_metrics_on_layer = direction_utils.compute_classification_metrics(projected_val_preds, val_y)
+            val_metrics_on_layer = direction_utils.compute_prediction_metrics(projected_val_preds, val_y)
             val_metrics[layer_to_eval] = val_metrics_on_layer
             
-            test_metrics_on_layer = direction_utils.compute_classification_metrics(projected_test_preds, test_y)
+            test_metrics_on_layer = direction_utils.compute_prediction_metrics(projected_test_preds, test_y)
             test_metrics[layer_to_eval] = test_metrics_on_layer
             
+            projections['train'].append(projected_train.reshape(-1, n_components))
             projections['val'].append(projected_val.reshape(-1, n_components))
             projections['test'].append(projected_test.reshape(-1, n_components))
         
-        # print("Aggregating predictions over layers using linear stacking")
-        agg_metrics, agg_beta, agg_bias = direction_utils.aggregate_layers(projections, val_y, test_y, use_logistic, use_rfm)
+        agg_metrics, agg_beta, agg_bias = direction_utils.aggregate_layers(projections, train_y, val_y, test_y, use_logistic, use_rfm)
         test_metrics['linear_agg'] = agg_metrics
             
         detector_coefs['agg'] = [agg_beta, agg_bias]
@@ -326,7 +348,6 @@ class NeuralController:
             projected_val = val_X@direction
             
             beta = direction_utils.linear_solve(projected_val, val_y, use_bias=False)
-            print("Learned beta:", beta)
             
             composite_vec = direction@beta
             composite_vec = composite_vec.reshape(1,-1)
@@ -364,14 +385,11 @@ class NeuralController:
             with open(detector_path, 'rb') as f:
                 self.detector_coefs = pickle.load(f)
         
-    def format_prompt(self, prompt, role='user', steer=False):
+    def format_prompt(self, prompt, steer=False):
         if self.name == 'toxicchat-t5-large':
-            new_prompt = f"ToxicChat: {prompt}"
-            return new_prompt
-        
-        chat = [{"role": "user", "content": prompt}]
-        if role=='assistant':
-            chat = [{"role": "user", "content": 'Hello, assistant.'},
-                    {"role": "assistant", "content": prompt}]
-            
-        return self.tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=steer)
+            formatted_prompt = f"ToxicChat: {prompt}"
+        else:
+            chat = [{"role": "user", "content": prompt}]
+            formatted_prompt = self.tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=steer)
+            formatted_prompt = formatted_prompt.strip('\n').strip()
+        return formatted_prompt

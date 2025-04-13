@@ -7,21 +7,17 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from neural_controllers import NeuralController
 from utils import load_model
-import re
-import json
 import numpy as np
-import torch
 
 import pickle
-from tqdm import tqdm
 
-import gc
 from datasets import load_dataset
 import random
 random.seed(0)
 from datasets import load_dataset
 
-
+import os   
+NEURAL_CONTROLLERS_DIR = os.environ['NEURAL_CONTROLLERS_DIR']
 def create_positive_negative_pairs(inputs, labels, max_pairs=None):
     """
     Creates pairs where each pair consists of one positive and one negative example.
@@ -125,8 +121,8 @@ def get_splits_fixed_train(n_val, n_total, n_seeds, unsupervised=False):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--control_method', type=str, default='linear')
-    parser.add_argument('--model_name', type=str, default='llama_3_8b_it')
+    parser.add_argument('--control_method', type=str, default='rfm')
+    parser.add_argument('--model_name', type=str, default='llama_3.3_70b_4bit_it')
     parser.add_argument('--n_seeds', type=int, default=5)
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--n_components', type=int, default=1)
@@ -207,21 +203,25 @@ def main():
         train_labels_split = train_labels_split_base
 
     try:
-        controller.load(concept='toxic_chat_full_seed_'+str(seed), model_name=model_name, path='../directions/')
+        controller.load(concept='toxic_chat_full_seed_'+str(seed), model_name=model_name, path=f'{NEURAL_CONTROLLERS_DIR}/directions/')
     except:
         controller.compute_directions(train_inputs_split, train_labels_split)
-        controller.save(concept='toxic_chat_full_seed_'+str(seed), model_name=model_name, path='../directions/')
+        controller.save(concept='toxic_chat_full_seed_'+str(seed), model_name=model_name, path=f'{NEURAL_CONTROLLERS_DIR}/directions/')
 
 
     ntrain  = len(train_inputs_split)
     nval = len(val_inputs)
     ntest = len(test_inputs)
-    out_name = f'./toxic_chat_results/{control_method}_data_counts_seed_{seed}.pkl'
+    results_dir = f'{NEURAL_CONTROLLERS_DIR}/results/toxic_chat_results'
+    os.makedirs(results_dir, exist_ok=True)
+    
+    out_name = f'{results_dir}/{control_method}_data_counts_seed_{seed}.pkl'
     with open(out_name, 'wb') as f:
         counts = {'train':ntrain, 'val':nval, 'test':ntest}
         pickle.dump(counts, f)
         
     val_metrics, test_metrics, _ = controller.evaluate_directions(
+        train_inputs_split, train_labels_split,
         val_inputs, val_labels,
         test_inputs, test_labels,
         n_components=n_components,
@@ -230,11 +230,11 @@ def main():
         unsupervised=unsupervised
     )
     
-    out_name = f'./toxic_chat_results/{model_name}_{original_control_method}_seed_{seed}_val_metrics.pkl'
+    out_name = f'{results_dir}/{model_name}_{original_control_method}_seed_{seed}_val_metrics.pkl'
     with open(out_name, 'wb') as f:
         pickle.dump(val_metrics, f)
         
-    out_name = f'./toxic_chat_results/{model_name}_{original_control_method}_seed_{seed}_test_metrics.pkl'
+    out_name = f'{results_dir}/{model_name}_{original_control_method}_seed_{seed}_test_metrics.pkl'
     with open(out_name, 'wb') as f:
         pickle.dump(test_metrics, f)
         

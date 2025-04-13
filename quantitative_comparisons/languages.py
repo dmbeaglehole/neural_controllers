@@ -22,22 +22,16 @@ def control_language_llama(sentence, controller, tokenizer, assistant_tag, num_n
     prompt = template.format(sentence=sentence)
     print("Prompt:",repr(prompt))
     
-    chat = [
-              {
-                "role": "user", 
-                "content": prompt
-              },
-    ]
-    prompt = tokenizer.apply_chat_template(chat, tokenize=False)
+    formatted_prompt = controller.format_prompt(prompt, steer=True)
     
-    whole_generation = controller.generate(prompt, 
+    whole_generation = controller.generate(formatted_prompt, 
                                      layers_to_control=list(range(-1, -31, -1)), 
                                      control_coef=coef, 
                                      max_new_tokens=num_new_tokens, 
                                      do_sample=False
                                     )
     
-    generation = whole_generation[len(prompt):]
+    generation = whole_generation[len(formatted_prompt):]
     try:
         generation = generation.split('"')[1]
     except:
@@ -60,22 +54,16 @@ def control_language_gemma(sentence, controller, tokenizer, assistant_tag, num_n
     prompt = template.format(sentence=sentence)
     print("Prompt:",repr(prompt))
     
-    chat = [
-              {
-                "role": "user", 
-                "content": prompt
-              },
-    ]
-    prompt = tokenizer.apply_chat_template(chat, tokenize=False)
-    
-    whole_generation = controller.generate(prompt, 
+    formatted_prompt = controller.format_prompt(prompt, steer=True)
+
+    whole_generation = controller.generate(formatted_prompt, 
                                      layers_to_control=list(range(-1, -41, -1)), 
                                      control_coef=coef, 
                                      max_new_tokens=num_new_tokens, 
                                      do_sample=False
                                     )
     
-    generation = whole_generation[len(prompt):]
+    generation = whole_generation[len(formatted_prompt):]
     
     try:
         generation = generation.split('"')[1]

@@ -2,6 +2,9 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 
+import sys
+sys.path.insert(0, '/u/dbeaglehole/xrfm')
+
 from xrfm import xRFM
 from sklearn.linear_model import LogisticRegression
 
@@ -87,7 +90,7 @@ def auroc_score(preds, labels):
 def compute_prediction_metrics(preds, labels):
     num_classes = labels.shape[1]
     auc = auroc_score(preds, labels)
-    mse = torch.mean((preds-labels)**2)
+    mse = torch.mean((preds-labels)**2).item()
     if num_classes == 1:  # Binary classification
         preds = torch.where(preds >= 0.5, 1, 0)
         labels = torch.where(labels >= 0.5, 1, 0)
@@ -249,7 +252,6 @@ def project_onto_direction(tensors, direction, device='cuda'):
     direction : (d, )
     output : (n, )
     """
-    print("tensors", tensors.shape, "direction", direction.shape)
     assert(len(tensors.shape)==2)
     assert(tensors.shape[1] == direction.shape[0])
     
@@ -284,9 +286,11 @@ def fit_pca_model(train_X, train_y, n_components=1, mean_center=True):
 
     # dif_vectors : (n//2, d)
     XtX = dif_vectors.T@dif_vectors
-    _, U = torch.linalg.eigh(XtX)
+    # _, U = torch.linalg.eigh(XtX)
+    # return torch.flip(U[:,-n_components:].T, dims=(0,))
 
-    return torch.flip(U[:,-n_components:].T, dims=(0,))
+    _, U = torch.lobpcg(XtX, k=n_components)
+    return U.T
 
 def append_one(X):
     Xb = torch.concat([X, torch.ones_like(X[:,0]).unsqueeze(1)], dim=1)
@@ -359,7 +363,8 @@ def aggregate_layers(layer_outputs, train_y, val_y, test_y, use_logistic=False, 
     print("train_X", train_X.shape, "val_X", val_X.shape, "test_X", test_X.shape)
 
     if use_rfm:
-        model = xRFM({'bandwidth': 10, 'reg': 1e-3, 'iters': 5}, device='cuda', tuning_metric=tuning_metric)
+        model = xRFM({'kernel':'l2_high_dim', 'bandwidth': 10, 'reg': 1e-3, 'iters': 5}, 
+                     device='cuda', tuning_metric=tuning_metric)
         model.fit(train_X, train_y, val_X, val_y)              
         agg_preds = model.predict(test_X)
         metrics = compute_prediction_metrics(agg_preds, test_y)
@@ -385,7 +390,7 @@ def train_rfm_probe_on_concept(train_X, train_y, val_X, val_y,
     if search_space is None:
         search_space = {
             'regs': [1e-3],
-            'bws': [1, 10, 100]
+            'bws': [1, 5, 20, 50, 100, 200]
         }
     
     best_model = None
@@ -394,7 +399,8 @@ def train_rfm_probe_on_concept(train_X, train_y, val_X, val_y,
     for reg in search_space['regs']:
         for bw in search_space['bws']:
 
-            model = xRFM({'bandwidth': bw, 'reg': reg, 'iters': 8}, device='cuda', tuning_metric=tuning_metric)
+            model = xRFM({'kernel':'l2_high_dim', 'bandwidth': bw, 'reg': reg, 'iters': hyperparams['rfm_iters']}, 
+                         device='cuda', tuning_metric=tuning_metric)
             model.fit(train_X, train_y, val_X, val_y)
             val_score = model.score(val_X, val_y)
 
@@ -410,7 +416,7 @@ def train_rfm_probe_on_concept(train_X, train_y, val_X, val_y,
 
 def train_linear_probe_on_concept(train_X, train_y, val_X, val_y, use_bias=False, tuning_metric='auc'):
 
-    reg_search_space = [0., 1e-9, 1e-7, 1e-5, 1e-3, 1e-1, 1, 10, 100, 1000, 10000]
+    reg_search_space = [1e-4, 1e-3, 1e-2, 1e-1, 1, 1e1]
     
     if use_bias:
         X = append_one(train_X)
@@ -466,7 +472,7 @@ def train_linear_probe_on_concept(train_X, train_y, val_X, val_y, use_bias=False
 
 def train_logistic_probe_on_concept(train_X, train_y, val_X, val_y, use_bias=False, num_classes=1, tuning_metric='auc'):
     
-    C_search_space = [0.01, 0.1, 1, 10, 100, 1000, 10000]
+    C_search_space = [1000, 100, 10, 1, 1e-1, 1e-2]
 
     val_y = val_y.cpu()
     if num_classes == 1:

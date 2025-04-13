@@ -18,6 +18,8 @@ import gc
 import random
 random.seed(0)
 
+NEURAL_CONTROLLERS_DIR = os.environ['NEURAL_CONTROLLERS_DIR']
+
 TYPE_MAP = {
     'confused': 'confused / erroneous queries',
     'inappropriate': 'inappropriate content',
@@ -62,7 +64,7 @@ def create_paired_data(pos_examples, neg_examples):
 
 
 def get_multiclass_halu_eval_wild_data(controller):
-    data_path = '../data/hallucinations/halu_eval_wild/HaluEval_Wild_6types.json'
+    data_path = f'{NEURAL_CONTROLLERS_DIR}/data/hallucinations/halu_eval_wild/HaluEval_Wild_6types.json'
     entries = read_json_to_list(data_path)
     
     # Get unique classes from TYPE_MAP
@@ -91,7 +93,7 @@ def get_multiclass_halu_eval_wild_data(controller):
 
 
 def get_splits(n_train, n_val, n_total, n_seeds):
-    out_name = f'./halu_eval_wild_results/splits_ntrain_{n_train}_nval_{n_val}_ntotal_{n_total}_nseeds_{n_seeds}.pkl'
+    out_name = f'{NEURAL_CONTROLLERS_DIR}/results/halu_eval_wild_results/splits_ntrain_{n_train}_nval_{n_val}_ntotal_{n_total}_nseeds_{n_seeds}.pkl'
     
     try:
         with open(out_name, 'rb') as f:
@@ -133,8 +135,8 @@ def get_splits(n_train, n_val, n_total, n_seeds):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--control_method', type=str, default='rfm')
-    parser.add_argument('--model_name', type=str, default='llama_3_8b_it')
-    parser.add_argument('--n_seeds', type=int, default=20)
+    parser.add_argument('--model_name', type=str, default='llama_3.3_70b_4bit_it')
+    parser.add_argument('--n_seeds', type=int, default=5)
     parser.add_argument('--n_train', type=int, default=300)
     parser.add_argument('--n_val', type=int, default=250)
     parser.add_argument('--n_components', type=int, default=6)
@@ -212,7 +214,7 @@ def main():
         ntrain  = len(train_inputs)
         nval = len(val_inputs)
         ntest = len(test_inputs)
-        out_name = f'./halu_eval_wild_results/{control_method}_data_counts_seed_{seed}.pkl'
+        out_name = f'{NEURAL_CONTROLLERS_DIR}/results/halu_eval_wild_results/{control_method}_data_counts_seed_{seed}.pkl'
         with open(out_name, 'wb') as f:
             counts = {'train':ntrain, 'val':nval, 'test':ntest}
             pickle.dump(counts, f)
@@ -236,13 +238,14 @@ def main():
         
         print("train shapes:", len(train_inputs_processed), train_labels_processed.shape)
         try:
-            controller.load(concept=f'halu_eval_wild_multiclass_seed_{seed}', model_name=model_name, path='../directions/')
+            controller.load(concept=f'halu_eval_wild_multiclass_seed_{seed}', model_name=model_name, path=f'{NEURAL_CONTROLLERS_DIR}/directions/')
         except:
             controller.compute_directions(train_inputs_processed, train_labels_processed)
                 
-            controller.save(concept=f'halu_eval_wild_multiclass_seed_{seed}', model_name=model_name, path='../directions/')
+            controller.save(concept=f'halu_eval_wild_multiclass_seed_{seed}', model_name=model_name, path=f'{NEURAL_CONTROLLERS_DIR}/directions/')
 
         val_metrics, test_metrics, _ = controller.evaluate_directions(
+            train_inputs_processed, train_labels_processed,
             val_inputs, val_labels,
             test_inputs, test_labels,
             n_components=n_components,
@@ -250,12 +253,14 @@ def main():
             use_rfm=use_rfm,
             unsupervised=unsupervised,
         )
-                
-        out_name = f'./halu_eval_wild_results/multiclass_{model_name}_{original_control_method}_seed_{seed}_val_metrics.pkl'
+        
+        results_dir = f'{NEURAL_CONTROLLERS_DIR}/results/halu_eval_wild_results'
+        os.makedirs(results_dir, exist_ok=True)
+        out_name = f'{results_dir}/multiclass_{model_name}_{original_control_method}_seed_{seed}_val_metrics.pkl'
         with open(out_name, 'wb') as f:
             pickle.dump(val_metrics, f)
             
-        out_name = f'./halu_eval_wild_results/multiclass_{model_name}_{original_control_method}_seed_{seed}_test_metrics.pkl'
+        out_name = f'{results_dir}/multiclass_{model_name}_{original_control_method}_seed_{seed}_test_metrics.pkl'
         with open(out_name, 'wb') as f:
             pickle.dump(test_metrics, f)
                      
