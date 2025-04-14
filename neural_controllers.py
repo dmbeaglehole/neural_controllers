@@ -28,7 +28,7 @@ TOOLKITS = {
 
 class NeuralController:
     def __init__(self, model, tokenizer, control_method='rfm', n_components=5, 
-                 rfm_iters=8, batch_size=8):
+                 rfm_iters=10, batch_size=2):
         self.model = model.eval()
         self.tokenizer = tokenizer
         self.control_method = control_method
@@ -154,7 +154,6 @@ class NeuralController:
         return direction_accs
     
     def evaluate_directions(self,
-                            train_data, train_labels,
                             val_data, val_labels,
                             test_data, test_labels,
                             hidden_layers=None, 
@@ -169,32 +168,19 @@ class NeuralController:
             hidden_layers = self.hidden_layers
         self.hidden_layers = hidden_layers
 
-        if not isinstance(train_labels, torch.Tensor):
-            train_labels = torch.tensor(train_labels).reshape(-1,1)
         if not isinstance(val_labels, torch.Tensor):
             val_labels = torch.tensor(val_labels).reshape(-1,1)
         if not isinstance(test_labels, torch.Tensor):
             test_labels = torch.tensor(test_labels).reshape(-1,1)
         
-        if len(train_labels.shape) == 1:
-            train_labels = train_labels.reshape(-1,1)
         if len(val_labels.shape) == 1:
             val_labels = val_labels.reshape(-1,1)
         if len(test_labels.shape) == 1:
             test_labels = test_labels.reshape(-1,1)
         
-        train_y = train_labels.to(self.model.device).float()
         val_y = val_labels.to(self.model.device).float()
         test_y = test_labels.to(self.model.device).float()
         assert(val_y.shape[1]==test_y.shape[1])
-
-        train_hidden_states = direction_utils.get_hidden_states(train_data, 
-                                                                self.model, 
-                                                                self.tokenizer, 
-                                                                hidden_layers, 
-                                                                self.hyperparams['forward_batch_size'],
-                                                                all_positions=agg_positions
-                                                                )
         
         val_hidden_states = direction_utils.get_hidden_states(val_data, 
                                                               self.model, 
@@ -213,7 +199,6 @@ class NeuralController:
                                                              )
         
         projections = {
-                        'train' : [],
                         'val' : [],
                         'test' : []
                     }
@@ -228,9 +213,6 @@ class NeuralController:
             direction = direction.to(self.model.device).float()[:n_components]
             direction = direction.T
 
-            train_X = train_hidden_states[layer_to_eval].cuda().float()
-            projected_train = train_X@direction
-            
             val_X = val_hidden_states[layer_to_eval].cuda().float()
             projected_val = val_X@direction
             
@@ -240,7 +222,6 @@ class NeuralController:
             if agg_positions:
                 projected_val = torch.mean(projected_val, dim=1) # mean projection
                 projected_test = torch.mean(projected_test, dim=1) # mean projection
-                projected_train = torch.mean(projected_train, dim=1) # mean projection
     
             if use_logistic:
                 beta, b = direction_utils.logistic_solve(projected_val, val_y)
@@ -255,13 +236,10 @@ class NeuralController:
                 
                 projected_val_preds = projected_val
                 projected_val_preds = torch.where(projected_val_preds>0, 1, 0)
-                
-                projected_train_preds = projected_train
-                projected_train_preds = torch.where(projected_train_preds>0, 1, 0)
+            
             else: # evaluate slope, intercept on test data
                 projected_val_preds = projected_val@beta + b
                 projected_test_preds = projected_test@beta + b
-                projected_train_preds = projected_train@beta + b
 
             assert(projected_test_preds.shape==test_y.shape)
             
@@ -271,14 +249,13 @@ class NeuralController:
             test_metrics_on_layer = direction_utils.compute_prediction_metrics(projected_test_preds, test_y)
             test_metrics[layer_to_eval] = test_metrics_on_layer
             
-            projections['train'].append(projected_train.reshape(-1, n_components))
             projections['val'].append(projected_val.reshape(-1, n_components))
             projections['test'].append(projected_test.reshape(-1, n_components))
         
-        agg_metrics, agg_beta, agg_bias = direction_utils.aggregate_layers(projections, train_y, val_y, test_y, use_logistic, use_rfm)
-        test_metrics['linear_agg'] = agg_metrics
+        agg_metrics, agg_beta, agg_bias = direction_utils.aggregate_layers(projections, val_y, test_y, use_logistic, use_rfm)
+        test_metrics['aggregation'] = agg_metrics
             
-        detector_coefs['agg'] = [agg_beta, agg_bias]
+        detector_coefs['aggregation'] = [agg_beta, agg_bias]
         return val_metrics, test_metrics, detector_coefs
     
     

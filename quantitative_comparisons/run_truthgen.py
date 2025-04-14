@@ -218,7 +218,6 @@ def main():
 
         
         val_metrics, test_metrics, _ = controller.evaluate_directions(
-            train_inputs, train_labels,
             val_inputs, val_labels,
             test_inputs, test_labels,
             n_components=n_components,

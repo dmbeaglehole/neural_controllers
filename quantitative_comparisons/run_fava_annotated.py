@@ -2,15 +2,15 @@ import argparse
 import os
 import sys
 from pathlib import Path
-notebook_path = Path().absolute()
-sys.path.append(str(notebook_path.parent))
+
+# Add parent directory to path
+sys.path.append(str(Path(__file__).parent.parent))
 
 from neural_controllers import NeuralController
 from utils import load_model
 import re
 import json
 import numpy as np
-import torch
 import random
 random.seed(0)
 
@@ -160,7 +160,9 @@ def get_splits(n_train, n_val, n_total, n_seeds):
     """
     Create splits for training, validation, and testing datasets.
     """
-    out_name = f'{NEURAL_CONTROLLERS_DIR}/results/fava_annotated_results/splits_ntrain_{n_train}_nval_{n_val}_ntotal_{n_total}_nseeds_{n_seeds}.pkl'
+    results_dir = f'{NEURAL_CONTROLLERS_DIR}/results/fava_annotated_results'
+    os.makedirs(results_dir, exist_ok=True)
+    out_name = f'{results_dir}/splits_ntrain_{n_train}_nval_{n_val}_ntotal_{n_total}_nseeds_{n_seeds}.pkl'
     try:
         with open(out_name, 'rb') as f:
             splits = pickle.load(f)
@@ -249,8 +251,7 @@ def main():
             language_model,
             tokenizer,
             control_method=control_method,
-            rfm_iters=8,
-            batch_size=2
+            batch_size=4
         )
         
         val_inputs = [inputs[i] for i in split['val_indices']]
@@ -263,6 +264,7 @@ def main():
         ntest = len(test_inputs)
         results_dir = f'{NEURAL_CONTROLLERS_DIR}/results/fava_annotated_results'
         os.makedirs(results_dir, exist_ok=True)
+
         out_name = f'{results_dir}/{control_method}_data_counts_seed_{seed}.pkl'
         with open(out_name, 'wb') as f:
             counts = {'val':nval, 'test':ntest}
@@ -279,7 +281,7 @@ def main():
                 tokenizer,
                 n_components=5,
                 control_method=control_method,
-                batch_size=1
+                batch_size=2
             )
             controller.compute_directions(train_inputs, train_labels)
             controller.save(concept='fava_training', model_name=model_name, path=f'{NEURAL_CONTROLLERS_DIR}/directions/')
@@ -288,7 +290,6 @@ def main():
         assert(len(test_inputs) > 0)
         
         val_metrics, test_metrics, _ = controller.evaluate_directions(
-            train_inputs, train_labels,
             val_inputs, val_labels,
             test_inputs, test_labels,
             n_components=n_components,
@@ -307,7 +308,6 @@ def main():
             
         del controller
         gc.collect()
-        torch.cuda.empty_cache()
-            
+
 if __name__ == '__main__':              
     main()

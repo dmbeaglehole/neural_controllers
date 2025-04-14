@@ -116,7 +116,7 @@ def main():
         language_model,
         tokenizer,
         control_method=control_method,
-        batch_size=1,
+        batch_size=2,
         rfm_iters=10
     )
     
@@ -165,7 +165,6 @@ def main():
           "Val labels:", len(val_labels), "Test labels:", len(test_labels))
     
     val_metrics, test_metrics, _ = controller.evaluate_directions(
-                                    train_inputs, train_labels,
                                     val_inputs, val_labels,
                                     test_inputs, test_labels,
                                     n_components=n_components,

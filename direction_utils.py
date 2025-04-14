@@ -15,7 +15,7 @@ from sklearn.metrics import roc_auc_score
 from copy import deepcopy
 from tqdm import tqdm
 
-from utils import preds_to_proba
+from utils import preds_to_proba, split_indices
 
 # For scaling linear probe beyond ~50k datapoints.
 def batch_transpose_multiply(A, B, mb_size=5000):
@@ -354,12 +354,18 @@ def logistic_solve(X, y):
     
     return beta.T, bias
 
-def aggregate_layers(layer_outputs, train_y, val_y, test_y, use_logistic=False, use_rfm=False, tuning_metric='auc'):
-            
+def aggregate_layers(layer_outputs, val_y, test_y, use_logistic=False, use_rfm=False, tuning_metric='auc'):
+    
     # solve aggregator on validation set
-    train_X = torch.concat(layer_outputs['train'], dim=1) # (n, num_layers*n_components)    
     val_X = torch.concat(layer_outputs['val'], dim=1) # (n, num_layers*n_components)    
     test_X = torch.concat(layer_outputs['test'], dim=1)
+
+    # split validation set into train and val
+    train_indices, val_indices = split_indices(len(val_y))
+    train_y = val_y[train_indices]
+    val_y = val_y[val_indices]
+    train_X = val_X[train_indices]
+    val_X = val_X[val_indices]
     print("train_X", train_X.shape, "val_X", val_X.shape, "test_X", test_X.shape)
 
     if use_rfm:
@@ -390,7 +396,8 @@ def train_rfm_probe_on_concept(train_X, train_y, val_X, val_y,
     if search_space is None:
         search_space = {
             'regs': [1e-3],
-            'bws': [1, 5, 20, 50, 100, 200]
+            'bws': [1, 10, 100],
+            'center_grads': [True, False]
         }
     
     best_model = None
@@ -398,19 +405,29 @@ def train_rfm_probe_on_concept(train_X, train_y, val_X, val_y,
     best_score = float('-inf') if maximize_metric else float('inf')
     for reg in search_space['regs']:
         for bw in search_space['bws']:
+            for center_grads in search_space['center_grads']:
+                try:
+                    model = xRFM({'kernel':'l2_high_dim', 
+                                'bandwidth': bw, 
+                                'reg': reg, 
+                                'iters': hyperparams['rfm_iters'],
+                                'center_grads': center_grads}, 
+                                device='cuda', tuning_metric=tuning_metric)
+                    model.fit(train_X, train_y, val_X, val_y)
+                    val_score = model.score(val_X, val_y)
 
-            model = xRFM({'kernel':'l2_high_dim', 'bandwidth': bw, 'reg': reg, 'iters': hyperparams['rfm_iters']}, 
-                         device='cuda', tuning_metric=tuning_metric)
-            model.fit(train_X, train_y, val_X, val_y)
-            val_score = model.score(val_X, val_y)
-
-            if maximize_metric and val_score > best_score or not maximize_metric and val_score < best_score:
-                best_score = val_score
-                best_reg = reg
-                best_model = deepcopy(model)
-                best_bw = bw    
-        
-    print(f'Best RFM {tuning_metric}: {best_score}, reg: {best_reg}, bw: {best_bw}')
+                    if maximize_metric and val_score > best_score or not maximize_metric and val_score < best_score:
+                        best_score = val_score
+                        best_reg = reg
+                        best_model = deepcopy(model)
+                        best_bw = bw    
+                        best_center_grads = center_grads
+                except Exception as e:
+                    import traceback
+                    print(f'Error fitting RFM: {traceback.format_exc()}')
+                    continue
+            
+    print(f'Best RFM {tuning_metric}: {best_score}, reg: {best_reg}, bw: {best_bw}, center_grads: {best_center_grads}')
 
     return best_model
 

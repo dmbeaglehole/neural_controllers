@@ -221,7 +221,6 @@ def main():
         pickle.dump(counts, f)
         
     val_metrics, test_metrics, _ = controller.evaluate_directions(
-        train_inputs_split, train_labels_split,
         val_inputs, val_labels,
         test_inputs, test_labels,
         n_components=n_components,

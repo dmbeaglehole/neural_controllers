@@ -1,0 +1,9 @@
+*logs
+*results
+*.ipynb_checkpoints/
+*delta_setup
+*__pycache__
+*data
+*directions
+quantitative_comparisons/language_translations/
+quantitative_comparisons/program_translations/

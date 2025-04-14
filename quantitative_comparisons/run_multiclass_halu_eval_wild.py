@@ -93,7 +93,9 @@ def get_multiclass_halu_eval_wild_data(controller):
 
 
 def get_splits(n_train, n_val, n_total, n_seeds):
-    out_name = f'{NEURAL_CONTROLLERS_DIR}/results/halu_eval_wild_results/splits_ntrain_{n_train}_nval_{n_val}_ntotal_{n_total}_nseeds_{n_seeds}.pkl'
+    results_dir = f'{NEURAL_CONTROLLERS_DIR}/results/halu_eval_wild_results'
+    os.makedirs(results_dir, exist_ok=True)
+    out_name = f'{results_dir}/splits_ntrain_{n_train}_nval_{n_val}_ntotal_{n_total}_nseeds_{n_seeds}.pkl'
     
     try:
         with open(out_name, 'rb') as f:
@@ -140,7 +142,7 @@ def main():
     parser.add_argument('--n_train', type=int, default=300)
     parser.add_argument('--n_val', type=int, default=250)
     parser.add_argument('--n_components', type=int, default=6)
-    parser.add_argument('--rfm_iters', type=int, default=3)
+    parser.add_argument('--rfm_iters', type=int, default=10)
     parser.add_argument('--seed', type=int, default=None)
     args = parser.parse_args()
     for n_, v_ in args.__dict__.items():
@@ -245,7 +247,6 @@ def main():
             controller.save(concept=f'halu_eval_wild_multiclass_seed_{seed}', model_name=model_name, path=f'{NEURAL_CONTROLLERS_DIR}/directions/')
 
         val_metrics, test_metrics, _ = controller.evaluate_directions(
-            train_inputs_processed, train_labels_processed,
             val_inputs, val_labels,
             test_inputs, test_labels,
             n_components=n_components,
