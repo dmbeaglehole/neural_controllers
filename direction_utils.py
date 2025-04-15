@@ -3,9 +3,9 @@ import torch
 from torch.utils.data import DataLoader, TensorDataset
 
 import sys
-sys.path.insert(0, '/u/dbeaglehole/xrfm')
 
-from xrfm import xRFM
+
+from rfm import LaplaceRFM
 from sklearn.linear_model import LogisticRegression
 
 from sklearn.model_selection import train_test_split
@@ -368,18 +368,18 @@ def aggregate_layers(layer_outputs, val_y, test_y, use_logistic=False, use_rfm=F
     print("train_X", train_X.shape, "val_X", val_X.shape, "test_X", test_X.shape)
 
     if use_rfm:
-        rfm_params = {
-            'model': {
-                'kernel': 'l2_high_dim',
-                'bandwidth': 10,
-            },
-            'fit': {
-                'reg': 1e-3,
-                'iters': 10
-            }
-        }
-        model = xRFM(rfm_params, device='cuda', tuning_metric=tuning_metric)
-        model.fit(train_X, train_y, val_X, val_y)              
+        model = LaplaceRFM(bandwidth=10, reg=1e-3, device='cuda')
+        model.fit(
+            (train_X, train_y), 
+            (val_X, val_y), 
+            loader=False, 
+            iters=5,
+            classification=False,
+            method='lstsq',
+            M_batch_size=2048,
+            verbose=False,
+            return_best_params=True
+        )        
         agg_preds = model.predict(test_X)
         metrics = compute_prediction_metrics(agg_preds, test_y)
         return metrics, None, None
@@ -415,20 +415,19 @@ def train_rfm_probe_on_concept(train_X, train_y, val_X, val_y,
         for bw in search_space['bws']:
             for center_grads in search_space['center_grads']:
                 try:
-                    rfm_params = {
-                        'model': {
-                            'kernel': 'l2_high_dim',
-                            'bandwidth': bw,
-                        },
-                        'fit': {
-                            'reg': reg,
-                            'iters': hyperparams['rfm_iters'],
-                            'center_grads': center_grads
-                        }
-                    }
-                    model = xRFM(rfm_params, device='cuda', tuning_metric=tuning_metric)
-                    model.fit(train_X, train_y, val_X, val_y)
-                    val_score = model.score(val_X, val_y)
+                    model = LaplaceRFM(bandwidth=bw, reg=reg, center_grads=center_grads, device='cuda')
+                    model.fit(
+                        (train_X, train_y), 
+                        (val_X, val_y), 
+                        loader=False, 
+                        iters=hyperparams['rfm_iters'],
+                        classification=False,
+                        method='lstsq',
+                        M_batch_size=2048,
+                        verbose=False,
+                        return_best_params=True
+                    )              
+                    val_score = model.score(val_X, val_y, metric='accuracy')
 
                     if maximize_metric and val_score > best_score or not maximize_metric and val_score < best_score:
                         best_score = val_score
