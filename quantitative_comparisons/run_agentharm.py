@@ -78,7 +78,7 @@ def create_paired_data(pos_examples, neg_examples):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--control_method', type=str, default='rfm')
-    parser.add_argument('--model_name', type=str, default='llama_3.3_70b_4bit_it')
+    parser.add_argument('--model_name', type=str, default='llama_3.3_70b_4bit_it', choices=['llama_3_8b_it', 'llama_3.3_70b_4bit_it'])
     parser.add_argument('--n_components', type=int, default=2)
     args = parser.parse_args()
     for n_, v_ in args.__dict__.items():

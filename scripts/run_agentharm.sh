@@ -1,5 +1,5 @@
-methods=('pca' 'linear' 'logistic' 'rfm_linear' 'linear_rfm')
-# methods=('rfm')
+methods=('linear' 'logistic' 'rfm_linear' 'linear_rfm')
+# methods=('pca' 'rfm')
 # models=('llama_3_8b_it' 'gemma_2_9b_it')
 models=('llama_3.3_70b_4bit_it')
 

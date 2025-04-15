@@ -137,7 +137,7 @@ def get_splits(n_train, n_val, n_total, n_seeds):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--control_method', type=str, default='rfm')
-    parser.add_argument('--model_name', type=str, default='llama_3.3_70b_4bit_it')
+    parser.add_argument('--model_name', type=str, default='llama_3.3_70b_4bit_it', choices=['llama_3_8b_it', 'llama_3.3_70b_4bit_it'])
     parser.add_argument('--n_seeds', type=int, default=5)
     parser.add_argument('--n_train', type=int, default=300)
     parser.add_argument('--n_val', type=int, default=250)

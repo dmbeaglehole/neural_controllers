@@ -1,7 +1,7 @@
 methods=('rfm' 'linear' 'logistic' 'rfm_linear' 'linear_rfm' 'pca')
 # methods=('logistic')
-models=('gemma_2_9b_it' 'llama_3_8b_it')
-# model='llama_3_8b_it'
+# models=('gemma_2_9b_it' 'llama_3_8b_it')
+models=('llama_3_8b_it')
 n_seeds=5
 seeds=(0 1 2 3 4)
 # seeds=(0)

@@ -1,7 +1,8 @@
-methods=('rfm' 'linear' 'logistic' 'linear_rfm' 'rfm_linear' 'pca')
-# methods=('logistic')
+methods=('rfm' 'linear' 'logistic' 'linear_rfm' 'rfm_linear')
+# methods=('pca')
 # models=('llama_3_8b_it' 'gemma_2_9b_it')
-models=('llama_3.3_70b_4bit_it')
+# models=('llama_3.3_70b_4bit_it')
+models=('llama_3_8b_it')
 for model in ${models[@]};
 do
     for method in ${methods[@]};

@@ -251,7 +251,8 @@ def main():
             language_model,
             tokenizer,
             control_method=control_method,
-            batch_size=4
+            batch_size=4,
+            rfm_iters=5
         )
         
         val_inputs = [inputs[i] for i in split['val_indices']]
@@ -281,7 +282,8 @@ def main():
                 tokenizer,
                 n_components=5,
                 control_method=control_method,
-                batch_size=2
+                batch_size=2,
+                rfm_iters=5
             )
             controller.compute_directions(train_inputs, train_labels)
             controller.save(concept='fava_training', model_name=model_name, path=f'{NEURAL_CONTROLLERS_DIR}/directions/')

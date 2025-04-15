@@ -316,9 +316,7 @@ class LogisticRegressionToolkit():
             
             print("Training logistic regression")
             beta, _ = direction_utils.train_logistic_probe_on_concept(train_X, train_y, val_X, val_y, num_classes=num_classes)
-            print("beta", beta.shape)
             concept_features = beta.to(train_X.dtype).T
-            print("concept_features", concept_features.shape)
             if num_classes == 1:
                 concept_features = concept_features.reshape(1,-1)
 

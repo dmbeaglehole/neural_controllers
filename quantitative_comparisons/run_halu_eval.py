@@ -194,7 +194,9 @@ def get_splits(n_val, n_total, n_seeds, hal_type):
     n_seeds: number of different random seeds for splits
     hal_type: type of hallucination data
     """
-    out_name = f'./halu_eval_results/{hal_type}_test_splits_nval_{n_val}_ntotal_{n_total}_nseeds_{n_seeds}.pkl'
+    results_dir = f'{NEURAL_CONTROLLERS_DIR}/results/halu_eval_results'
+    os.makedirs(results_dir, exist_ok=True)
+    out_name = f'{results_dir}/{hal_type}_test_splits_nval_{n_val}_ntotal_{n_total}_nseeds_{n_seeds}.pkl'
     try:
         with open(out_name, 'rb') as f:
             splits = pickle.load(f)
@@ -270,7 +272,7 @@ def main():
             language_model,
             tokenizer,
             control_method=control_method,
-            rfm_iters=8,
+            rfm_iters=5,
             batch_size=2
         )
     
